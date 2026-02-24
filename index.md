@@ -1,8 +1,8 @@
 # CS 30 Work
 
 ## Demos
-- I'll link to demos here
+- [Demo](01-first_day)
 
 
 ## Assignments
-- Add assignment
+- [InteractiveScene](Interactive_Scene)
