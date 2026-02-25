@@ -1,9 +1,7 @@
 // Interactive Scene
 // Vivaan Jalla-Dhar
 // Feb 24, 2026
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+
 
 
 // Ball variables
@@ -56,11 +54,11 @@ function draw() {
   fill("white");
   circle(ballX, ballY, circleDiameter);
   
-  if (ballX > (width-circleRadius) || ballX < circleRadius) {
+  if (ballX > width-circleRadius || ballX < circleRadius) {
     dx *= -1;
   }
   
-  if (ballY > (height-circleRadius) || ballY < circleRadius) {
+  if (ballY > height-circleRadius || ballY < circleRadius) {
     dy *= -1;
   }
   
@@ -76,7 +74,7 @@ function draw() {
  
   
   
-  playerMovement()
+  playerMovement();
   
 }
 
