@@ -1,6 +1,6 @@
-// Project Title
-// Your Name
-// Date
+// Interactive Scene
+// Vivaan Jalla-Dhar
+// Feb 24, 2026
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
@@ -13,7 +13,7 @@ let dx = 5;
 let dy = 4;
 
 let circleDiameter = 30;
-let circleRadius = circleDiameter/2
+let circleRadius = circleDiameter/2;
 let r = 255;
 let g = 255;
 let b = 255;
@@ -31,7 +31,7 @@ let p2y = 0;
 let speed = 10;
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(windowWidth, windowHeight);
   noStroke();
   ballX = width/2;
   ballY = height/2;
