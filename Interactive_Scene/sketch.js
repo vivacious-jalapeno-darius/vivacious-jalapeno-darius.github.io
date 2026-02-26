@@ -48,31 +48,22 @@ function setup() {
 function draw() {
   // --------- Background ---------
   background("black");
-  
-  // ----------------- Ball -----------------
-  ballX += dx;
-  ballY += dy;
-  fill("white");
-  circle(ballX, ballY, circleDiameter);
-  
-  if (ballX > width-circleRadius || ballX < circleRadius) {
-    dx *= -1;
-  }
-  if (ballY > height-circleRadius || ballY < circleRadius) {
-    dy *= -1;
-  }
-  
-  // --------------------- P1 ---------------------
-  rect(p1x, p1y, playerWidth, playerHeight);
-  
-  // --------------------- P2 ---------------------
-  let p2x = width-playerWidth;
-  rect(p2x, p2y, playerWidth, playerHeight);
-  // ----------------------------------------------
+  // ------------------------------
+  ballMovement();
+  createPlayers();
   playerMovement();
   
 }
 
+
+function createPlayers() {
+  // --------------------- P1 ---------------------
+  rect(p1x, p1y, playerWidth, playerHeight);
+
+  // --------------------- P2 ---------------------
+  let p2x = width-playerWidth;
+  rect(p2x, p2y, playerWidth, playerHeight);
+}
 
 function playerMovement() {
   // --------------------- P1 ---------------------
@@ -105,4 +96,16 @@ function playerMovement() {
 
 }
 
-
+function ballMovement() {
+  ballX += dx;
+  ballY += dy;
+  fill("white");
+  circle(ballX, ballY, circleDiameter);
+  
+  if (ballX > width-circleRadius || ballX < circleRadius) {
+    dx *= -1;
+  }
+  if (ballY > height-circleRadius || ballY < circleRadius) {
+    dy *= -1;
+  }
+}
