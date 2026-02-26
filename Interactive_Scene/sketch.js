@@ -28,9 +28,6 @@ let p2y = 0;
 
 let speed = 10;
 
-
-
-// ------------------------- FUNCTIONS -------------------------
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
@@ -43,9 +40,12 @@ function setup() {
 
 
 
+
+
 function draw() {
   // --------- Background ---------
   background("black");
+  
   
   // ----------------- Ball -----------------
   ballX += dx;
@@ -57,23 +57,26 @@ function draw() {
   if (ballX > width-circleRadius || ballX < circleRadius) {
     dx *= -1;
   }
+  
   if (ballY > height-circleRadius || ballY < circleRadius) {
     dy *= -1;
   }
+  
+  // P2 variable
+  let p2x = width-playerWidth;
   
   // --------------------- P1 ---------------------
   
   rect(p1x, p1y, playerWidth, playerHeight);
   
   // --------------------- P2 ---------------------
-  let p2x = width-playerWidth;
   rect(p2x, p2y, playerWidth, playerHeight);
  
-  // ----------------------------------------------
+  
+  
   playerMovement();
+  
 }
-
-
 
 function playerMovement() {
   // --------------------- P1 ---------------------
@@ -85,12 +88,15 @@ function playerMovement() {
   }
   
   // --------------------- P2 ---------------------
+  
   if (keyIsDown(38)) {
     p2y -= speed;
   }
   if (keyIsDown(40)){
     p2y += speed;
   }
+  
+  
   
 }
 
