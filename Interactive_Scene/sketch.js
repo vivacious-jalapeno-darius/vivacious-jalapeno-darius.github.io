@@ -8,8 +8,8 @@
 // ------------------------- VARIABLES -------------------------
 // ----- Ball variables -----
 // Physics
-let dx = 10;
-let dy = 9;
+let dx = 3;
+let dy = 2;
 // Size
 let ballX;
 let ballY;
@@ -17,7 +17,7 @@ let circleDiameter = 30;
 let circleRadius = circleDiameter/2;
 // Colour
 let r = 255;
-let g = 255;
+let g = 255;  
 let b = 255;
 
 // ----- Player variables -----
@@ -31,6 +31,7 @@ let speed = 20;
 // P1 variables
 let p1x = 0;
 let p1y = 0;
+let p1End = p1y + playerHeight;
 
 // P2 variable
 let p2y = 0;
@@ -46,7 +47,6 @@ function setup() {
   ballX = width/2;
   ballY = height/2;
 }
-
 
 
 // ------------------------- LOOPING FUNCTIONS -------------------------
@@ -77,7 +77,7 @@ function playerMovement() {
     if (keyIsDown(87)) {  //w 
       p1y -= speed;
       if (p1y <= 0) {
-        p1y = 0
+        p1y = 0;
       }
     }
     if (keyIsDown(83)) { //s 
@@ -110,10 +110,23 @@ function ballMovement() {
   fill("white");
   circle(ballX, ballY, circleDiameter);
   
-  if (ballX > width-circleRadius-playerWidth || ballX < circleRadius) {
-    dx *= -1;
-  }
+  
+
   if (ballY > height-circleRadius || ballY < circleRadius) {
     dy *= -1;
   }
+  if (ballX > width-circleRadius || ballX < circleRadius && (ballY >= p1y && ballY <= p1End)) {
+    console.log(ballX);
+    console.log(ballY);
+    console.log(p1y);
+    console.log(p1End);
+    dx *= -1;
+  }
+  else if (ballX > width-circleRadius || ballX < circleRadius && !(ballY >= p1y && ballY <= p1End)) {
+    ballX = windowWidth/2;
+    ballY = windowHeight/2;
+    dx = 0;
+    dy = 0;
+  }
+  
 }
