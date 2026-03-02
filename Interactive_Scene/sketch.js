@@ -110,7 +110,7 @@ function ballMovement() {
   fill("white");
   circle(ballX, ballY, circleDiameter);
   
-  if (ballX > width-circleRadius || ballX < circleRadius) {
+  if (ballX > width-circleRadius-playerWidth || ballX < circleRadius) {
     dx *= -1;
   }
   if (ballY > height-circleRadius || ballY < circleRadius) {
