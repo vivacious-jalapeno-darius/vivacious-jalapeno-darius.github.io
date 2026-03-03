@@ -8,13 +8,15 @@
 // ------------------------- VARIABLES -------------------------
 // ----- Ball variables -----
 // Physics
-let dx = 3;
-let dy = 2;
+let dx = 7;
+let dy = 7;
+
 // Size
 let ballX;
 let ballY;
 let circleDiameter = 30;
 let circleRadius = circleDiameter/2;
+
 // Colour
 let r = 255;
 let g = 255;  
@@ -31,7 +33,6 @@ let speed = 20;
 // P1 variables
 let p1x = 0;
 let p1y = 0;
-let p1End = p1y + playerHeight;
 
 // P2 variable
 let p2y = 0;
@@ -46,6 +47,10 @@ function setup() {
   noStroke();
   ballX = width/2;
   ballY = height/2;
+  let options = createButton("Bob")
+  let buttonWidth = windowWidth/8
+  options.size(buttonWidth, 20)
+  options.position(windowWidth/2 - (buttonWidth/2), 10)
 }
 
 
@@ -110,23 +115,18 @@ function ballMovement() {
   fill("white");
   circle(ballX, ballY, circleDiameter);
   
-  
+  let p1End = p1y + playerHeight;
+  let p2End = p2y + playerHeight;
 
   if (ballY > height-circleRadius || ballY < circleRadius) {
     dy *= -1;
   }
-  if (ballX > width-circleRadius || ballX < circleRadius && (ballY >= p1y && ballY <= p1End)) {
-    console.log(ballX);
-    console.log(ballY);
-    console.log(p1y);
-    console.log(p1End);
+ if ((ballX > width - circleRadius || ballX < circleRadius) && (ballY >= p1y && ballY <= p1End || ballY >= p2y && ballY <= p2End)) {
     dx *= -1;
   }
-  else if (ballX > width-circleRadius || ballX < circleRadius && !(ballY >= p1y && ballY <= p1End)) {
-    ballX = windowWidth/2;
-    ballY = windowHeight/2;
-    dx = 0;
-    dy = 0;
+  else if (ballX > width - circleRadius || ballX < circleRadius) {
+    ballX = width / 2;
+    ballY = height / 2;
   }
   
 }
