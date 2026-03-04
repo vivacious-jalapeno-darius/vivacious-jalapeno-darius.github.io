@@ -2,7 +2,7 @@
 
 ## Demos
 - [Demo](01-first_day)
-- [Scopes] (02-scope_demo)
+- [Scopes](02-scope_demo)
 
 
 ## Assignments
