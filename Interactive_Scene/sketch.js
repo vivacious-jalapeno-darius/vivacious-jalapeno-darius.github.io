@@ -54,10 +54,10 @@ function setup() {
   ballY = height/2;
   
   // ---------- Button ----------
-  options = createButton("Pause")
-  let buttonWidth = windowWidth/8
-  options.size(buttonWidth, 20)
-  options.position(windowWidth/2 - (buttonWidth/2), 10)
+  options = createButton("Pause");
+  let buttonWidth = windowWidth/8;
+  options.size(buttonWidth, 20);
+  options.position(windowWidth/2 - buttonWidth/2, 10);
   options.mousePressed(togglePause);
 }
 
@@ -128,12 +128,12 @@ function ballMovement() {
     let p2End = p2y + playerHeight;
 
     if (ballY > height-circleRadius || ballY < circleRadius) {
-      dy *= -1.0001;
+      dy *= -1.001;
     }
 
     // ------------- r ------------- // ------------ r (p2) ------------- // --------- l --------- // ------------ l (p1) ----------- 
-    if ((ballX > width - circleRadius && (ballY >= p2y && ballY <= p2End)) || (ballX < circleRadius && (ballY >= p1y && ballY <= p1End))) {
-      dx *= -1.0001;
+    if (ballX > width - circleRadius && (ballY >= p2y && ballY <= p2End) || ballX < circleRadius && (ballY >= p1y && ballY <= p1End)) {
+      dx *= -1.001;
     }
 
     // r
@@ -157,20 +157,20 @@ function togglePause() {
   pause = !pause;
 
   if (pause) {
-    options.html("Paused")
+    options.html("Paused");
   }
   else {
-    options.html("Pause")
+    options.html("Pause");
   }
 }
 
 
 function scoreUpdate() {
-  p1ScoreBoard = `Score: ${p1Score}`
-  p2ScoreBoard = `Score: ${p2Score}`
+  p1ScoreBoard = `Score: ${p1Score}`;
+  p2ScoreBoard = `Score: ${p2Score}`;
 
-  textSize(20)
-  text(p1ScoreBoard, (windowWidth * (1/4)), 40)
-  text(p2ScoreBoard, (windowWidth * (3/4)), 40)
+  textSize(20);
+  text(p1ScoreBoard, windowWidth * (1/4), 40);
+  text(p2ScoreBoard, windowWidth * (3/4), 40);
 }
 
