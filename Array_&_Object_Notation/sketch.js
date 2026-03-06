@@ -1,9 +1,13 @@
-// Project Title
-// Your Name
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// --------------------------------------------------------------------------------
+// Array & Object Notation
+// Vivaan Jalla-Dhar
+// March 13, 2026
+// --------------------------------------------------------------------------------
+
+
+shooter = {
+  age: 67,
+};
 
 
 function setup() {
