@@ -6,16 +6,16 @@
 
 
 let playerImg;
-let bkgImage
+let bkgImage;
+
 
 let bird = {
+  ypos: 700,
   xpos: 3/8,
-  ypos: 5/8,
   thick: 70,
   tall: 50,
-  dy: 0,
+  dy: 30,
   gravityScale: 5,
-  jumpForce: 30,
 };
 
 
@@ -25,20 +25,30 @@ function preload() {
 }
 
 function setup() {
+  
   createCanvas(windowWidth, windowHeight);
   
 }
 
+
+
 function draw() {
-  background(bkgImage)
-  image(playerImg, windowWidth*bird.xpos, windowHeight*bird.ypos, bird.thick, bird.tall); 
-  jumpAction()
+  
+
+  background(bkgImage);
+   
+  jumpAction();
+  image(playerImg, windowWidth*bird.xpos, bird.ypos, bird.thick, bird.tall);
 }
 
 
 function jumpAction() {
   if(keyIsDown(32)) {
-    bird.dy -= bird.jumpForce;
+    bird.ypos -= bird.dy;
+    //for(let fall = 0, fall >= 0, fall--) {
 
+    //}
   }
+
+
 }
