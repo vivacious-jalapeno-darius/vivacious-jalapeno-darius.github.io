@@ -128,12 +128,12 @@ function ballMovement() {
     let p2End = p2y + playerHeight;
 
     if (ballY > height-circleRadius || ballY < circleRadius) {
-      dy *= -1.001;
+      dy *= -1.01;
     }
 
     // ------------- r ------------- // ------------ r (p2) ------------- // --------- l --------- // ------------ l (p1) ----------- 
     if (ballX > width - circleRadius && (ballY >= p2y && ballY <= p2End) || ballX < circleRadius && (ballY >= p1y && ballY <= p1End)) {
-      dx *= -1.001;
+      dx *= -1.01;
     }
 
     // r
