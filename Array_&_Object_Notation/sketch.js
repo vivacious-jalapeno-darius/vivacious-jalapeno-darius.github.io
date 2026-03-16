@@ -15,7 +15,9 @@ let bkgImage;
 let beginGame = false;
 let birdStartingPoint;
 let gravityInput;
-
+let gameOverText;
+let dead = false;
+let gameOverTextSize = 200;
 // -------------------- OBJECT NOTATION -------------------- \\
 let bird = {
   ypos: 500,
@@ -23,7 +25,7 @@ let bird = {
   thick: 70,
   tall: 50,
   dy: 0,
-  gravityScale: 0.3,
+  gravityScale: 0.5,
 };
 
 
@@ -57,12 +59,20 @@ function inputControl() {
   gravityInput.position(windowHeight * (1/32), 10);
 }
 
+
+
 // -------------------- LOOPING FUNCTIONS -------------------- \\
 function draw() {
-  background(bkgImage);
-  jumpAction();
+  if (!dead) {
+    background(bkgImage);
+    jumpAction();
+    createPlayer();
+  }
+}
+
+
+function createPlayer() {
   image(playerImg, windowWidth*bird.xpos, bird.ypos, bird.thick, bird.tall);
-  
 }
 
 
@@ -86,11 +96,27 @@ function jumpAction() {
     if (bird.ypos < 0) {
       bird.ypos = 0;
       bird.dy = 0;
+      bird.gravityScale = 0;
+      dead = true;
+      gameOver();
+      playerImg.hide();
     }
     // makes sure that the bird doesn't fo above the screen
     if (bird.ypos + bird.tall > height) {
       bird.ypos = height - bird.tall;
       bird.dy = 0;
+      dead = true;
+      gameOver();
+      playerImg.hide();
     }
   }
+}
+
+
+function gameOver() {
+  background("silver");
+  fill("red");
+  gameOverText = "GAME OVER";
+  textSize(gameOverTextSize);
+  text(gameOverText, windowWidth/4 - gameOverTextSize/2, windowHeight/2 + gameOverTextSize/2);
 }
