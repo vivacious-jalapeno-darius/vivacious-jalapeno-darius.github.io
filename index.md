@@ -5,6 +5,7 @@
 - [Scopes](02-scope_demo)
 - [Ball Array](04-ball_array)
 - [Art](05-tiles)
+- [Perlin Noise](06-noise)
 
 
 ## Assignments

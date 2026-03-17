@@ -41,6 +41,7 @@ let bird = {
 };
 
 
+
 // -------------------- 1 TIME FUNCTIONS -------------------- \\
 function preload() {
   playerImg = loadImage('flappy_bird.png');
@@ -69,10 +70,7 @@ function startingPosition() {
 function inputControl() {
   gravityInput = createInput();
   gravityInput.size(gravityInputTextBoxWidth, gravityInputTextBoxHeight);
-  gravityInput.position(windowWidth/2 - (gravityInputTextBoxWidth/2), windowHeight/2 - gravityInputTextBoxHeight); 
-  //whatDoesThisTextBoxDo = "Input a number between 1-10 to set gravity ---->"
-  //textSize(20);
-  //text(whatDoesThisTextBoxDo, )
+  gravityInput.position(windowWidth/2 - gravityInputTextBoxWidth/2, windowHeight/2 - gravityInputTextBoxHeight); 
 }
 
 
@@ -83,9 +81,17 @@ function draw() {
     background(bkgImage);
     jumpAction();
     createPlayer();
+    textBoxCreation();
   }
 }
 
+
+function textBoxCreation() {
+  fill("white");
+  whatDoesThisTextBoxDo = "Input a number between 1-10 to set gravity";
+  textSize(30);
+  text(whatDoesThisTextBoxDo, windowWidth/2 - gravityInputTextBoxWidth, windowHeight/2 - gravityInputTextBoxHeight*2);
+}
 
 function createPlayer() {
   image(playerImg, windowWidth*bird.xpos, bird.ypos, bird.thick, bird.tall);
@@ -102,10 +108,11 @@ function keyPressed() {
   }
 
   if (keyCode === 13 && !beginGame) {
-    gravityValueChecker()
+    gravityValueChecker();
     if (!gravityOutOfBounds){
-      gravityInput.hide()
-      gravityScale = (gravityInput.value()) * 0.1;
+      gravityInput.hide();
+      whatDoesThisTextBoxDo.hide();
+      gravityScale = gravityInput.value() * 0.1;
       if (!gravityScaleConfirmed) {
         gravityScaleConfirmed = !gravityScaleConfirmed;
       }
@@ -136,7 +143,7 @@ function jumpAction() {
     }
 
     // makes sure that the bird doesn't go below the screen
-      // if it does, the bird dies
+    // if it does, the bird dies
     if (bird.ypos + bird.tall > height) {
       bird.ypos = height - bird.tall;
       bird.dy = 0;
