@@ -14,8 +14,15 @@ let playerImg;
 let bkgImage;
 let beginGame = false;
 let birdStartingPoint;
+
 let gravityInput;
 let gravityScale = 0.5;
+let gravityInputTextBoxWidth = 300;
+let gravityInputTextBoxHeight = 50;
+let gravityScaleConfirmed = false;
+let gravityOutOfBounds;
+let whatDoesThisTextBoxDo;
+
 let gameOverText;
 let dead = false;
 let gameOverTextSize = 200;
@@ -61,8 +68,11 @@ function startingPosition() {
 
 function inputControl() {
   gravityInput = createInput();
-  gravityInput.position(windowHeight * (1/32), 10);
-  
+  gravityInput.size(gravityInputTextBoxWidth, gravityInputTextBoxHeight);
+  gravityInput.position(windowWidth/2 - (gravityInputTextBoxWidth/2), windowHeight/2 - gravityInputTextBoxHeight); 
+  //whatDoesThisTextBoxDo = "Input a number between 1-10 to set gravity ---->"
+  //textSize(20);
+  //text(whatDoesThisTextBoxDo, )
 }
 
 
@@ -86,14 +96,30 @@ function keyPressed() {
   // when the 'spacebar' is pressed, then the bird jumps
   if (keyCode === 32) { // 'spacebar'
     bird.dy = -10;
-    if (!beginGame) {
+    if (!beginGame && gravityScaleConfirmed){
       beginGame = !beginGame;
     }
   }
 
   if (keyCode === 13 && !beginGame) {
-    gravityInput.hide()
-    gravityScale = (gravityInput.value()) * 0.1;
+    gravityValueChecker()
+    if (!gravityOutOfBounds){
+      gravityInput.hide()
+      gravityScale = (gravityInput.value()) * 0.1;
+      if (!gravityScaleConfirmed) {
+        gravityScaleConfirmed = !gravityScaleConfirmed;
+      }
+    }
+  }
+}
+
+
+function gravityValueChecker() {
+  if (gravityInput.value() <= 0 || gravityInput.value() > 10) {
+    gravityOutOfBounds = true;
+  }
+  else {
+    gravityOutOfBounds = false;
   }
 }
 
@@ -107,12 +133,10 @@ function jumpAction() {
     if (bird.ypos < 0) {
       bird.ypos = 0;
       bird.dy = 0;
-      gravityScale = 0;
-      dead = true;
-      gameOver();
-      playerImg.hide();
     }
+
     // makes sure that the bird doesn't go below the screen
+      // if it does, the bird dies
     if (bird.ypos + bird.tall > height) {
       bird.ypos = height - bird.tall;
       bird.dy = 0;
