@@ -15,9 +15,15 @@ let bkgImage;
 let beginGame = false;
 let birdStartingPoint;
 let gravityInput;
+let gravityScale = 0.5;
 let gameOverText;
 let dead = false;
 let gameOverTextSize = 200;
+
+let pipes = [];
+let pipesWidth = 200;
+let pipesSpeed = 10;
+
 // -------------------- OBJECT NOTATION -------------------- \\
 let bird = {
   ypos: 500,
@@ -25,7 +31,6 @@ let bird = {
   thick: 70,
   tall: 50,
   dy: 0,
-  gravityScale: 0.5,
 };
 
 
@@ -57,6 +62,7 @@ function startingPosition() {
 function inputControl() {
   gravityInput = createInput();
   gravityInput.position(windowHeight * (1/32), 10);
+  
 }
 
 
@@ -84,24 +90,29 @@ function keyPressed() {
       beginGame = !beginGame;
     }
   }
+
+  if (keyCode === 13 && !beginGame) {
+    gravityInput.hide()
+    gravityScale = (gravityInput.value()) * 0.1;
+  }
 }
 
 
 function jumpAction() {
   if (beginGame) { // if the player has pressed 'space' for the first time, then only the game can begin
     // ------ GRAVITY ------- \\
-    bird.dy += bird.gravityScale;
+    bird.dy += gravityScale;
     bird.ypos += bird.dy;
     // makes sure that the bird doesn't go above the screen
     if (bird.ypos < 0) {
       bird.ypos = 0;
       bird.dy = 0;
-      bird.gravityScale = 0;
+      gravityScale = 0;
       dead = true;
       gameOver();
       playerImg.hide();
     }
-    // makes sure that the bird doesn't fo above the screen
+    // makes sure that the bird doesn't go below the screen
     if (bird.ypos + bird.tall > height) {
       bird.ypos = height - bird.tall;
       bird.dy = 0;
