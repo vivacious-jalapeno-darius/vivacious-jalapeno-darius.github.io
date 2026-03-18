@@ -111,7 +111,7 @@ function keyPressed() {
     gravityValueChecker();
     if (!gravityOutOfBounds){
       gravityInput.hide();
-      whatDoesThisTextBoxDo.hide();
+      //whatDoesThisTextBoxDo.hide();
       gravityScale = gravityInput.value() * 0.1;
       if (!gravityScaleConfirmed) {
         gravityScaleConfirmed = !gravityScaleConfirmed;
