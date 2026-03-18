@@ -6,6 +6,7 @@
 - [Ball Array](04-ball_array)
 - [Art](05-tiles)
 - [Perlin Noise](06-noise)
+- [2D Grid](07-grid)
 
 
 ## Assignments
