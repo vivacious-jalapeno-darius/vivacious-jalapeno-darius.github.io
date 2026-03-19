@@ -21,7 +21,7 @@ let gravityInputTextBoxWidth = 300;
 let gravityInputTextBoxHeight = 50;
 let gravityScaleConfirmed = false;
 let gravityOutOfBounds;
-let textboxInstructionText
+let textboxInstructionText;
 
 // --- GAME STATUS VARIABLES --- \\
 let beginGame = false;
@@ -194,9 +194,9 @@ function pipeGenerator() {
     minTopHeight = height / 32;
     maxTopHeight = height - pipeGap - minTopHeight;
 
-    if (pipes.length === 0 || pipes[pipes.length - 1].x < width - (pipesWidth * 3)) {
+    if (pipes.length === 0 || pipes[pipes.length - 1].x < width - pipesWidth * 3) {
       randTopHeight = random(minTopHeight, maxTopHeight); 
-      
+      // array
       pipes.push({
         x: width,
         topH: randTopHeight,
@@ -222,6 +222,8 @@ function scoreFunction() {
     rect(pipes[i].x, bottomPipeStartingPoint, pipesWidth, bottomPipeHeight);
 
     birdXCoords = windowWidth * bird.xpos;
+
+    // checks when the bird passes the pipe gap
     if (birdXCoords + bird.thick > pipes[i].x && birdXCoords < pipes[i].x + pipesWidth) {
       if (bird.ypos < pipes[i].topH || bird.ypos + bird.tall > bottomPipeStartingPoint) {
         dead = true;
@@ -258,5 +260,5 @@ function gameOver() {
   gameOverText = "GAME OVER";
   textSize(gameOverTextSize);
   textAlign(CENTER);
-  text(gameOverText, windowWidth/2, windowHeight/2 + (gameOverTextSize/2));
+  text(gameOverText, windowWidth/2, windowHeight/2 + gameOverTextSize/2);
 }
