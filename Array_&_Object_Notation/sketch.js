@@ -193,13 +193,14 @@ function pipeGenerator() {
     pipeGap = height / 4;
     minTopHeight = height / 32;
     maxTopHeight = height - pipeGap - minTopHeight;
-
+    // if there is no pipe on screen or the last pipe is 3x the width's distance to the right end of the screen,
+    // then it makes a new pipe
     if (pipes.length === 0 || pipes[pipes.length - 1].x < width - pipesWidth * 3) {
       randTopHeight = random(minTopHeight, maxTopHeight); 
       // array
       pipes.push({
         x: width,
-        topH: randTopHeight,
+        topHeight: randTopHeight,
         scored: false
       });
     }
@@ -212,25 +213,26 @@ function pipeGenerator() {
 
 function scoreFunction() {
   for (let i = pipes.length - 1; i >= 0; i--) {
-    pipes[i].x -= pipesSpeed;
+    pipes[i].x -= pipesSpeed; // moves pipe across the screen (from right to left)
 
     fill(pipeColour);
-    rect(pipes[i].x, 0, pipesWidth, pipes[i].topH);
+    rect(pipes[i].x, 0, pipesWidth, pipes[i].topHeight); // pipe's charaterics 
 
-    bottomPipeStartingPoint = pipes[i].topH + pipeGap;
+    bottomPipeStartingPoint = pipes[i].topHeight + pipeGap;
     bottomPipeHeight = height - bottomPipeStartingPoint;
     rect(pipes[i].x, bottomPipeStartingPoint, pipesWidth, bottomPipeHeight);
 
     birdXCoords = windowWidth * bird.xpos;
 
     // checks when the bird passes the pipe gap
+    // when it does then it adds a point
     if (birdXCoords + bird.thick > pipes[i].x && birdXCoords < pipes[i].x + pipesWidth) {
-      if (bird.ypos < pipes[i].topH || bird.ypos + bird.tall > bottomPipeStartingPoint) {
+      if (bird.ypos < pipes[i].topHeight || bird.ypos + bird.tall > bottomPipeStartingPoint) {
         dead = true;
         gameOver();
       }
     }
-
+    // birdXCoords is the bird's x coordinate (#px) and bird.xpos is the location of the bird reletive to the screen (3/8 of windowWidth)
     if (!pipes[i].scored && birdXCoords > pipes[i].x + pipesWidth) {
       score++;
       pipes[i].scored = true;
@@ -244,6 +246,7 @@ function scoreFunction() {
 
 
 function scoreDisplay() {
+  // game score
   fill("white");
   textSize(50);
   textAlign(CENTER);
@@ -254,7 +257,7 @@ function scoreDisplay() {
 
 // --------------- GAME OVER --------------- \\
 function gameOver() {
-  pipes = [];
+  pipes = []; // removes all pipes when dead
   background("silver");
   fill("red");
   gameOverText = "GAME OVER";
