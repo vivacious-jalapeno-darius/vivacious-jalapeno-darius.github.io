@@ -7,7 +7,7 @@
 - [Art](05-tiles)
 - [Perlin Noise](06-noise)
 - [2D Grid](07-grid)
-
+- [Rectangular Grid](08-rect_grid)
 
 ## Assignments
 - [Interactive Scene](Interactive_Scene)
