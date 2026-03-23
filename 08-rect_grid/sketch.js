@@ -1,7 +1,7 @@
 // 2d grid
 // 2026 - 03 - 20
 
-const CELL_SIZE = 3;
+const CELL_SIZE = 30;
 let rows;
 let cols;
 let grid;
@@ -24,14 +24,7 @@ function mousePressed() {
 
   //self
   toggleCell(x, y);
-
-  //neighbours
-  toggleCell(x - 1, y);
-  toggleCell(x + 1, y);
-  toggleCell(x, y - 1);
-  toggleCell(x, y + 1);
 }
-
 function keyPressed() {
   if (key === "r") {
     grid = generateRandomGrid(cols, rows);
