@@ -2,7 +2,9 @@
 // 2026 - 03 - 23
 
 
-const CELL_SIZE = 67;
+const CELL_SIZE = 20;
+const DEAD_CELL = 0;
+const ALIVE_CELL = 1;
 const RENDER_ON_FRAME_MULTIPLE = 3;
 let autoPlayIsOn = false;
 let rows;
@@ -14,6 +16,7 @@ function setup() {
   rows = Math.floor(height/CELL_SIZE);
   cols = Math.floor(width/CELL_SIZE);
   grid = generateRandomGrid(cols, rows);
+  noStroke();
 }
 
 function draw() {
@@ -68,7 +71,7 @@ function takeTurn() {
       neighbours -= grid[y][x];
 
       //apply the rules
-      if (grid[y][x] === 1) {
+      if (grid[y][x] === ALIVE_CELL) {
         //currently alive
         if (neighbours === 2 || neighbours === 3) {
           nextTurn[y][x] = 1;
@@ -78,7 +81,7 @@ function takeTurn() {
         }
       }
 
-      if (grid[y][x] === 0) {
+      if (grid[y][x] === DEAD_CELL) {
         //currently dead
         if (neighbours === 3) {
           nextTurn[y][x] = 1;
@@ -108,10 +111,10 @@ function displayGrid() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       if (grid[y][x] === 0) {
-        fill("white");
+        fill("black");
       }
       else if (grid[y][x] === 1) {
-        fill("black");
+        fill("white");
       }
       square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
     }
