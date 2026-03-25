@@ -37,7 +37,7 @@ function makeTable(tableRows, tableCols) {
   tableLeftMargin = width/10;
   tableTopMargin = height/10;
   tableRightMargin = width-tableLeftMargin;
-  tableBottomMargin = height-tableTopMargin
+  tableBottomMargin = height-tableTopMargin;
 
 
   for (let y = tableTopMargin; y < tableBottomMargin; y++){
