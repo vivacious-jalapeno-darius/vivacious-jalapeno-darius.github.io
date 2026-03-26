@@ -5,52 +5,73 @@
 // April 12, 2026
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - ...
 // --------------------------------------------------------------------------------
 
 
-// -------------------- VARIABLES -------------------- \\
-const TABLE_SQUARE_SIZE = 67;
+// ------------------------- VARIABLES ------------------------- \\
+const TABLE_SQUARE_SIZE = 61;
 
-let tableLeftMargin;
-let tableRightMargin;
-let tableTopMargin;
-let tableBottomMargin;
+let margin = TABLE_SQUARE_SIZE / 2;
 
 let tableRows;
 let tableCols;
-let casinoRed = "#B30000";
 
+let xpos;
+let ypos;
+
+let mysteryBox;
+// ----- COLOURS -----
+let casinoRedBackground = "#B30000";
+let casinoGoldTable = "#EFBF04";
+// ------------------------------------------------------------- \\
+
+
+
+
+// ------------------------- 1 TIME FUNCTIONS ------------------------ \\
+function preload(){
+  mysteryBox = loadImage('mystery_box.png');
+}
 
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(casinoRed);
-  tableRows = Math.floor(width/TABLE_SQUARE_SIZE);
-  tableCols = Math.floor(height/TABLE_SQUARE_SIZE);
-  makeTable(tableRows, tableCols);
+  background(casinoRedBackground);
+  makeTable();
 }
 
 
-function makeTable(tableRows, tableCols) {
-  tableLeftMargin = width/10;
-  tableTopMargin = height/10;
-  tableRightMargin = width-tableLeftMargin;
-  tableBottomMargin = height-tableTopMargin;
 
+function makeTable() {
+  mathFlooring();
 
-  for (let y = tableTopMargin; y < tableBottomMargin; y++){
-    
+  for (let i = 0; i < tableRows; i++) {
+    for (let j = 0; j < tableCols; j++) { 
+      fill(casinoGoldTable);
+
+      xpos = margin + j * TABLE_SQUARE_SIZE;
+      ypos = margin + i * TABLE_SQUARE_SIZE;
+
+      square(xpos, ypos, TABLE_SQUARE_SIZE);
+
+      image(mysteryBox, xpos, ypos, TABLE_SQUARE_SIZE, TABLE_SQUARE_SIZE);
+    }
   }
 }
 
 
-function draw() {
-  
-  
+
+function mathFlooring() {
+  tableCols = Math.floor((width - margin * 2) / TABLE_SQUARE_SIZE);
+  tableRows = Math.floor((height - margin * 2) / TABLE_SQUARE_SIZE);
 }
 
+// ------------------------- LOOPING FUNCTIONS -------------------------\\
+function draw() {
+  
+}
 
 
 
