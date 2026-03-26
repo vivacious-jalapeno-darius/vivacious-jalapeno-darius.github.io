@@ -10,7 +10,7 @@
 
 
 // ------------------------- VARIABLES ------------------------- \\
-const TABLE_SQUARE_SIZE = 61;
+const TABLE_SQUARE_SIZE = 135;
 
 let margin = TABLE_SQUARE_SIZE / 2;
 
@@ -21,9 +21,15 @@ let xpos;
 let ypos;
 
 let mysteryBox;
+
+let titleSize;
+let titleText = "";
 // ----- COLOURS -----
 let casinoRedBackground = "#B30000";
 let casinoGoldTable = "#EFBF04";
+let textColour = "black";
+// ----- GAME STATUS -----
+let gameStatus = "start";
 // ------------------------------------------------------------- \\
 
 
@@ -37,9 +43,27 @@ function preload(){
 
 
 function setup() {
+  titleSize = (width + height) / 10;
   createCanvas(windowWidth, windowHeight);
   background(casinoRedBackground);
-  makeTable();
+  if (gameStatus === "start") {
+    startScreen();
+  }
+  else if (gameStatus === "make bets") {
+
+  }
+  else if (gameStatus === "gambling") {
+    makeTable();
+  }
+}
+
+
+
+function startScreen() {
+  textAlign(CENTER, CENTER);
+  textSize(titleSize);
+  fill(textColour);
+  text();
 }
 
 
