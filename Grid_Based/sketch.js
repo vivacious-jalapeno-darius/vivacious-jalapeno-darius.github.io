@@ -10,7 +10,7 @@
 
 
 // ------------------------- VARIABLES ------------------------- \\
-const TABLE_SQUARE_SIZE = 135;
+const TABLE_SQUARE_SIZE = 101;
 
 let margin = TABLE_SQUARE_SIZE / 2;
 
