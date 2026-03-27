@@ -12,6 +12,9 @@
 // ------------------------- VARIABLES ------------------------- \\
 const TABLE_SQUARE_SIZE = 135;
 
+let cash = 100;
+let cashDisplay;
+
 let margin = TABLE_SQUARE_SIZE / 2;
 
 let screenCenterx;
@@ -30,7 +33,7 @@ let mysteryBox;
 
 
 let titleSize;
-let titleText = "BIG DON'S CASINO";
+let titleText = "BIG VON'S CASINO";
 let subTitleText = "All $$$ goes straight to Vivaan Jalla-Dhar (no refunds)";
 let font;
 
@@ -86,6 +89,8 @@ function restateVariables() {
   startScreenButtonypos = height * (4/5);
 }
 
+
+
 function startButton() {
   startScreenButton = createButton(startScreenButtonText);
   startScreenButton.size(startScreenButtonWidth, startScreenButtonHeight);
@@ -103,7 +108,7 @@ function draw() {
     startScreen();
   }
   else if (gameStatus === "make bets") {
-
+    makeBetsScreen();
   }
   else if (gameStatus === "gambling") {
     makeTable();
@@ -131,11 +136,22 @@ function titleScreen(){
 
 
 
-
 function makeBetsTransition(){
-  gameStatus = "gambling"; // temperary
+  gameStatus = "make bets"; // temperary
   startScreenButton.hide();
 }
+
+
+
+function makeBetsScreen() {
+  cashDisplay = `$ ${cash}`;
+
+  textSize(40);
+  fill("black");
+  text(cashDisplay, screenCenterx, height *(1/5));
+}
+
+
 
 function makeTable() {
   mathFlooring();
@@ -153,7 +169,6 @@ function makeTable() {
     }
   }
 }
-
 
 
 
