@@ -5,7 +5,7 @@
 // April 12, 2026
 //
 // Extra for Experts:
-// - ...
+// - Adding touchscreen
 // --------------------------------------------------------------------------------
 
 
@@ -14,6 +14,12 @@ const TABLE_SQUARE_SIZE = 135;
 
 let cash = 100;
 let cashDisplay;
+let minimumBet = 1;
+let betSliderIncrements = 1;
+let betSlider;
+let betText;
+
+
 
 let margin = TABLE_SQUARE_SIZE / 2;
 
@@ -33,17 +39,22 @@ let mysteryBox;
 
 
 let titleSize;
+let subTitleSize;
 let titleText = "BIG VON'S CASINO";
 let subTitleText = "All $$$ goes straight to Vivaan Jalla-Dhar (no refunds)";
 let font;
 
 
-let startScreenButton;
-let startScreenButtonText = "BEGIN";
-let startScreenButtonWidth;
-let startScreenButtonHeight;
-let startScreenButtonxpos;
-let startScreenButtonypos;
+let startScreenButton = {
+  button: undefined,
+  text: "BEGIN",
+  width: undefined,
+  height: undefined,
+  xpos: undefined,
+  ypos: undefined,
+
+};
+
 
 let makeBetsButton;
 
@@ -77,26 +88,26 @@ function setup() {
 
 function restateVariables() {
   titleSize = (width + height) /10;
-  subTitleSize = (width + height) / 300;
+  subTitleSize = (width + height) / 350;
 
   screenCenterx = width/2;
   screenCentery = height/2;
 
-  startScreenButtonWidth = width/8;
-  startScreenButtonHeight = 30;
+  startScreenButton.width = width/8;
+  startScreenButton.height = 30;
 
-  startScreenButtonxpos = screenCenterx - startScreenButtonWidth/2;
-  startScreenButtonypos = height * (4/5);
+  startScreenButton.xpos = screenCenterx - startScreenButton.width/2;
+  startScreenButton.ypos = height * (4/5);
 }
 
 
 
 function startButton() {
-  startScreenButton = createButton(startScreenButtonText);
-  startScreenButton.size(startScreenButtonWidth, startScreenButtonHeight);
-  startScreenButton.position(startScreenButtonxpos, startScreenButtonypos);
-  startScreenButton.style('background-color', casinoGoldTable);
-  startScreenButton.mousePressed(makeBetsTransition);
+  startScreenButton.button = createButton(startScreenButton.text);
+  startScreenButton.button.size(startScreenButton.width, startScreenButton.height);
+  startScreenButton.button.position(startScreenButton.xpos, startScreenButton.ypos);
+  startScreenButton.button.style('background-color', casinoGoldTable);
+  startScreenButton.button.mousePressed(makeBetsTransition);
 }
 
 
@@ -138,10 +149,10 @@ function titleScreen(){
 
 function makeBetsTransition(){
   gameStatus = "make bets"; // temperary
-  startScreenButton.hide();
+  startScreenButton.button.hide();
 }
 
-
+ 
 
 function makeBetsScreen() {
   cashDisplay = `$ ${cash}`;
