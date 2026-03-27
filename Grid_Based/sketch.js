@@ -29,7 +29,7 @@ let casinoRedBackground = "#B30000";
 let casinoGoldTable = "#EFBF04";
 let textColour = "black";
 // ----- GAME STATUS -----
-let gameStatus = "start";
+let gameStatus = "gambling";
 // ------------------------------------------------------------- \\
 
 
