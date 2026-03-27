@@ -14,18 +14,36 @@ const TABLE_SQUARE_SIZE = 135;
 
 let margin = TABLE_SQUARE_SIZE / 2;
 
+let screenCenterx;
+let screenCentery;
+
+
 let tableRows;
 let tableCols;
+
 
 let xpos;
 let ypos;
 
+
 let mysteryBox;
+
 
 let titleSize;
 let titleText = "BIG DON'S CASINO";
 let subTitleText = "All $$$ goes straight to Vivaan Jalla-Dhar (no refunds)";
 let font;
+
+
+let startScreenButton;
+let startScreenButtonText = "BEGIN";
+let startScreenButtonWidth;
+let startScreenButtonHeight;
+let startScreenButtonxpos;
+let startScreenButtonypos;
+
+let makeBetsButton;
+
 
 // ----- COLOURS -----
 let casinoRedBackground = "#B30000";
@@ -47,11 +65,34 @@ function preload(){
 
 
 function setup() {
-  titleSize = (width + height)* 2/3;
-  subTitleSize = (width + height) / 20;
   createCanvas(windowWidth, windowHeight);
+  restateVariables();
+  startButton();
 }
 
+
+
+function restateVariables() {
+  titleSize = (width + height) /10;
+  subTitleSize = (width + height) / 300;
+
+  screenCenterx = width/2;
+  screenCentery = height/2;
+
+  startScreenButtonWidth = width/8;
+  startScreenButtonHeight = 30;
+
+  startScreenButtonxpos = screenCenterx - startScreenButtonWidth/2;
+  startScreenButtonypos = height * (4/5);
+}
+
+function startButton() {
+  startScreenButton = createButton(startScreenButtonText);
+  startScreenButton.size(startScreenButtonWidth, startScreenButtonHeight);
+  startScreenButton.position(startScreenButtonxpos, startScreenButtonypos);
+  startScreenButton.style('background-color', casinoGoldTable);
+  startScreenButton.mousePressed(makeBetsTransition);
+}
 
 
 
@@ -73,6 +114,12 @@ function draw() {
 
 
 function startScreen() {
+  titleScreen();
+}
+
+
+
+function titleScreen(){
   textAlign(CENTER, CENTER);
   textSize(titleSize);
   fill(textColour);
@@ -83,6 +130,12 @@ function startScreen() {
 }
 
 
+
+
+function makeBetsTransition(){
+  gameStatus = "gambling"; // temperary
+  startScreenButton.hide();
+}
 
 function makeTable() {
   mathFlooring();
