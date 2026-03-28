@@ -12,27 +12,42 @@
 // ------------------------- VARIABLES ------------------------- \\
 const TABLE_SQUARE_SIZE = 135;
 
-let cash = 100;
-let cashDisplay;
-let minimumBet = 1;
-let betSliderIncrements = 1;
-let betSlider;
-let betText;
-
-
-
 let margin = TABLE_SQUARE_SIZE / 2;
 
 let screenCenterx;
 let screenCentery;
 
 
+// ----- COLOURS -----
+let casinoRedBackground = "#B30000";
+let casinoGoldTable = "#EFBF04";
+let textColour = "black";
+// ----- GAME STATUS -----
+let gameStatus = "start";
+
+
+
+let cash = 100;
+let cashDisplay;
+const CASH_DISPLAY_TEXT_SIZE = 60;
+const MINIMUM_BET = 1;
+let maximumBet = cash;
+const BET_SLIDER_INCREMENT = 1;
+let betSlider;
+let betText;
+let betSliderSize;
+let betSliderxpos;
+
+let betPlaced;
+
+
+
 let tableRows;
 let tableCols;
 
 
-let xpos;
-let ypos;
+let tableXpos;
+let tableYpos;
 
 
 let mysteryBox;
@@ -52,20 +67,22 @@ let startScreenButton = {
   height: undefined,
   xpos: undefined,
   ypos: undefined,
-
 };
 
 
-let makeBetsButton;
+let beginGambling = {
+  button: undefined,
+  text: "BET",
+  width: undefined,
+  height: undefined,
+  xpos: undefined,
+  ypos: undefined,
+};
 
 
-// ----- COLOURS -----
-let casinoRedBackground = "#B30000";
-let casinoGoldTable = "#EFBF04";
-let textColour = "black";
-// ----- GAME STATUS -----
-let gameStatus = "start";
-// ------------------------------------------------------------- \\
+
+
+
 
 
 
@@ -82,6 +99,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   restateVariables();
   startButton();
+  selectingBetSlider();
+  letsGoGambling();
 }
 
 
@@ -98,6 +117,15 @@ function restateVariables() {
 
   startScreenButton.xpos = screenCenterx - startScreenButton.width/2;
   startScreenButton.ypos = height * (4/5);
+
+  betSliderSize = width / 10;
+  betSliderxpos = screenCenterx-betSliderSize/2;
+
+  beginGambling.width = width/6;
+  beginGambling.height = 60;
+
+  beginGambling.xpos = screenCenterx - beginGambling.width/2;
+  beginGambling.ypos = height * (4/5);
 }
 
 
@@ -109,6 +137,27 @@ function startButton() {
   startScreenButton.button.style('background-color', casinoGoldTable);
   startScreenButton.button.mousePressed(makeBetsTransition);
 }
+
+
+
+function selectingBetSlider() {
+  betSlider = createSlider(MINIMUM_BET, maximumBet, MINIMUM_BET, BET_SLIDER_INCREMENT);
+  betSlider.size(betSliderSize);
+  betSlider.position(betSliderxpos, height * (1/2));
+  betSlider.hide();
+}
+
+
+
+function letsGoGambling() {
+  beginGambling.button = createButton(beginGambling.text);
+  beginGambling.button.size(beginGambling.width, beginGambling.height);
+  beginGambling.button.position(beginGambling.xpos, beginGambling.ypos);
+  beginGambling.button.style('background-color', casinoGoldTable);
+  beginGambling.button.mousePressed(summonGamblingTable);
+  beginGambling.button.hide();
+}
+
 
 
 
@@ -125,17 +174,8 @@ function draw() {
     makeTable();
   }
 }
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \\
-
-
-
-function startScreen() {
-  titleScreen();
-}
-
-
-
-function titleScreen(){
+// -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   - \\
+function startScreen(){
   textAlign(CENTER, CENTER);
   textSize(titleSize);
   fill(textColour);
@@ -148,21 +188,34 @@ function titleScreen(){
 
 
 function makeBetsTransition(){
-  gameStatus = "make bets"; // temperary
+  gameStatus = "make bets";
   startScreenButton.button.hide();
+  betSlider.show();
+  beginGambling.button.show();
 }
 
  
 
 function makeBetsScreen() {
-  cashDisplay = `$ ${cash}`;
-
-  textSize(40);
+  cashDisplay = `$${cash}`;
+  textSize(CASH_DISPLAY_TEXT_SIZE);
   fill("black");
-  text(cashDisplay, screenCenterx, height *(1/5));
+  text(cashDisplay, screenCenterx, CASH_DISPLAY_TEXT_SIZE);
+
+  if (MINIMUM_BET >= maximumBet) {
+    maximumBet = MINIMUM_BET;
+  }
+  betPlaced = betSlider.value();
+  text(`Bet: $${betPlaced}`, screenCenterx, height * (2/5));
 }
 
 
+
+function summonGamblingTable() {
+  gameStatus = "gambling";
+  betSlider.hide();
+  beginGambling.button.hide();
+}
 
 function makeTable() {
   mathFlooring();
@@ -171,12 +224,12 @@ function makeTable() {
     for (let j = 0; j < tableCols; j++) { 
       fill(casinoGoldTable);
 
-      xpos = margin + j * TABLE_SQUARE_SIZE;
-      ypos = margin + i * TABLE_SQUARE_SIZE;
+      tableXpos = margin + j * TABLE_SQUARE_SIZE;
+      tableYpos = margin + i * TABLE_SQUARE_SIZE;
 
-      square(xpos, ypos, TABLE_SQUARE_SIZE);
+      square(tableXpos, tableYpos, TABLE_SQUARE_SIZE);
 
-      image(mysteryBox, xpos, ypos, TABLE_SQUARE_SIZE, TABLE_SQUARE_SIZE);
+      image(mysteryBox, tableXpos, tableYpos, TABLE_SQUARE_SIZE, TABLE_SQUARE_SIZE);
     }
   }
 }
