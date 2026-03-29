@@ -45,12 +45,17 @@ let betPlaced;
 let tableRows;
 let tableCols;
 
+let mouseXpos;
+let mouseYpos;
+
 
 let tableXpos;
 let tableYpos;
 
 
 let mysteryBox;
+let prize;
+let prizeCollectedSound;
 
 
 let titleSize;
@@ -83,14 +88,12 @@ let beginGambling = {
 
 
 
-
-
-
-
 // ------------------------- 1 TIME FUNCTIONS ------------------------ \\
 function preload(){
   mysteryBox = loadImage('mystery_box.png');
   font = loadFont("AmericanCaptain-MdEY.otf");
+  prize = loadImage("money(prize).jpg");
+  prizeCollectedSound = loadSound("YAHOO SOUND EFFECT (MARIO).mp3");
 }
 
 
@@ -175,6 +178,10 @@ function draw() {
   }
 }
 // -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   - \\
+
+
+
+// ---------- "start" Game Status ----------\\
 function startScreen(){
   textAlign(CENTER, CENTER);
   textSize(titleSize);
@@ -186,7 +193,7 @@ function startScreen(){
 }
 
 
-
+// ----- "start" >>> "make bets" Transition ----- \\
 function makeBetsTransition(){
   gameStatus = "make bets";
   startScreenButton.button.hide();
@@ -196,6 +203,7 @@ function makeBetsTransition(){
 
  
 
+// ---------- "make bets" Game Status ---------- \\
 function makeBetsScreen() {
   cashDisplay = `$${cash}`;
   textSize(CASH_DISPLAY_TEXT_SIZE);
@@ -211,14 +219,18 @@ function makeBetsScreen() {
 
 
 
+// ----- "make bets" >>> "gambling" Transition ----- \\
 function summonGamblingTable() {
   gameStatus = "gambling";
   betSlider.hide();
   beginGambling.button.hide();
 }
 
+
+
+// ---------- "gambling" Game Status ---------- \\
 function makeTable() {
-  mathFlooring();
+  mathFlooringTable();
 
   for (let i = 0; i < tableRows; i++) {
     for (let j = 0; j < tableCols; j++) { 
@@ -236,9 +248,32 @@ function makeTable() {
 
 
 
-function mathFlooring() {
+function mathFlooringTable() {
   tableCols = Math.floor((width - margin * 2) / TABLE_SQUARE_SIZE);
   tableRows = Math.floor((height - margin * 2) / TABLE_SQUARE_SIZE);
+}
+
+
+function mathFlooringMouse() {
+  mouseXpos = Math.floor(mouseX/TABLE_SQUARE_SIZE);
+  mouseYpos = Math.floor(mouseY/TABLE_SQUARE_SIZE);
+}
+
+
+
+function mousePressed() {
+  mathFlooringMouse();
+  revealMysteryBox(mouseXpos, mouseYpos);
+}
+
+
+
+function revealMysteryBox(mouseXpos, mouseYpos) {
+  if (mouseXpos >= 0 && mouseXpos < tableCols && mouseYpos >= 0 && y < tableRows) {
+
+  }
+
+
 }
 
 
