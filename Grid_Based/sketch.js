@@ -125,7 +125,7 @@ function restateVariables() {
   startScreenButton.xpos = screenCenterx - startScreenButton.width/2;
   startScreenButton.ypos = height * (4/5);
 
-  betSliderSize = width / 5;
+  betSliderSize = width / 3;
   betSliderxpos = screenCenterx-betSliderSize/2;
 
   beginGambling.width = width/6;
