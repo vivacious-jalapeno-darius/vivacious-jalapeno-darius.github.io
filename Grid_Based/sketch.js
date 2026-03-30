@@ -11,8 +11,12 @@
 
 // ------------------------- VARIABLES ------------------------- \\
 const TABLE_SQUARE_SIZE = 135;
+const REWARD = 1;
+const MONEY_LOSS = 0;
+const MONEY_MULTIPLIER = 1.25;
+let moneyMultiplierValue;
 
-let margin = TABLE_SQUARE_SIZE / 2;
+let margin = TABLE_SQUARE_SIZE / 4;
 
 let screenCenterx;
 let screenCentery;
@@ -44,6 +48,7 @@ let betPlaced;
 
 let tableRows;
 let tableCols;
+let grid;
 
 let mouseXpos;
 let mouseYpos;
@@ -273,11 +278,24 @@ function mousePressed() {
 
 
 function revealMysteryBox(mouseXpos, mouseYpos) {
-  if (mouseXpos >= 0 && mouseXpos < tableCols && mouseYpos >= 0 && y < tableRows) {
-
+  if (mouseXpos >= 0 && mouseXpos < tableCols && mouseYpos >= 0 && mouseYpos < tableRows) {
+    if (grid[y][x] === REWARD) {
+      moneyMultiplierValue *= MONEY_MULTIPLIER;
+    }
+    else if (grid[y][x] === MONEY_LOSS) {
+      moneyMultiplierValue *= MONEY_MULTIPLIER;
+      gameOverJumpScare();
+    }
   }
 
 
+}
+
+
+
+// ----- When Player Clicks Wrong Box ----- \\
+function gameOverJumpScare() {
+  
 }
 
 
