@@ -110,6 +110,10 @@ function setup() {
 
 function restateVariables() {
   titleSize = (width + height) /10;
+  // for vertical screens
+  if (width < height) {
+    titleSize = width/6;
+  }
   subTitleSize = (width + height) / 350;
 
   screenCenterx = width/2;
