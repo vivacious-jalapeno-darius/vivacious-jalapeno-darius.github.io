@@ -11,10 +11,15 @@
 
 // ------------------------- VARIABLES ------------------------- \\
 const TABLE_SQUARE_SIZE = 135;
+
+
 const REWARD = 1;
 const MONEY_LOSS = 0;
 const MONEY_MULTIPLIER = 1.25;
+
 let moneyMultiplierValue;
+let multiplierDisplay;
+
 
 let margin = TABLE_SQUARE_SIZE / 4;
 
@@ -184,6 +189,7 @@ function draw() {
   }
   else if (gameStatus === "gambling") {
     makeTable();
+    showMultiplier();
   }
 }
 // -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   - \\
@@ -241,18 +247,34 @@ function summonGamblingTable() {
 function makeTable() {
   mathFlooringTable();
 
+  let totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
+  let totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
+
+  // 2. Find the starting point to center it
+  let offsetX = (width - totalGridWidth) / 2;
+  let offsetY = (height - totalGridHeight) / 2;
+
   for (let i = 0; i < tableRows; i++) {
     for (let j = 0; j < tableCols; j++) { 
       fill(casinoGoldTable);
 
-      tableXpos = margin + j * TABLE_SQUARE_SIZE;
-      tableYpos = margin + i * TABLE_SQUARE_SIZE;
+      
+      tableXpos = offsetX + j * TABLE_SQUARE_SIZE;
+      tableYpos = offsetY + i * TABLE_SQUARE_SIZE;
 
       square(tableXpos, tableYpos, TABLE_SQUARE_SIZE);
-
       image(mysteryBox, tableXpos, tableYpos, TABLE_SQUARE_SIZE, TABLE_SQUARE_SIZE);
     }
   }
+}
+
+
+
+function showMultiplier() {
+  multiplierDisplay = `x${moneyMultiplierValue}`;
+  textSize(CASH_DISPLAY_TEXT_SIZE);
+  fill("black");
+  text(cashDisplay, width - CASH_DISPLAY_TEXT_SIZE, CASH_DISPLAY_TEXT_SIZE);
 }
 
 
@@ -280,6 +302,7 @@ function mousePressed() {
 function revealMysteryBox(mouseXpos, mouseYpos) {
   if (mouseXpos >= 0 && mouseXpos < tableCols && mouseYpos >= 0 && mouseYpos < tableRows) {
     if (grid[y][x] === REWARD) {
+
       moneyMultiplierValue *= MONEY_MULTIPLIER;
     }
     else if (grid[y][x] === MONEY_LOSS) {
