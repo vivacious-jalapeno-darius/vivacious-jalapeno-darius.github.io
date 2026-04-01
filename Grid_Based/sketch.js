@@ -10,70 +10,94 @@
 
 
 // ------------------------- VARIABLES ------------------------- \\
+// --------------- CONSTANTS --------------- \\
+// ----- TOTAL CASH DISPLAY ----- \\
+const CASH_DISPLAY_TEXT_SIZE = 60;
+
+// ----- BETTING SLIDER ----- \\
+const BET_SLIDER_INCREMENT = 1;
+const MINIMUM_BET = 1;
+
+// ----- MONEY MULTIPLIER ----- \\
+const MONEY_MULTIPLIER = 1.25;
+const MULTIPLIER_DISPLAY_TEXT_SIZE = 40;
+
+// ----- TABLE GENERATION ----- \\
 const TABLE_SQUARE_SIZE = 135;
 
-
-const REWARD = 1;
+// ----- LOSS AND REWARD FROM GAMBLING ----- \\
 const MONEY_LOSS = 0;
-const MONEY_MULTIPLIER = 1.25;
-
-let moneyMultiplierValue;
-let multiplierDisplay;
+const REWARD = 1;
 
 
-let margin = TABLE_SQUARE_SIZE / 4;
-
-let screenCenterx;
-let screenCentery;
+//  -   -   -   -   -   -   -   -   -   -   -   - 
 
 
-// ----- COLOURS -----
-let casinoRedBackground = "#B30000";
-let casinoGoldTable = "#EFBF04";
-let textColour = "black";
-// ----- GAME STATUS -----
+// ----- GAME STATUS ----- \\
 let gameStatus = "start";
 
 
-
-let cash = 100;
-let cashDisplay;
-const CASH_DISPLAY_TEXT_SIZE = 60;
-const MINIMUM_BET = 1;
-let maximumBet = cash;
-const BET_SLIDER_INCREMENT = 1;
-let betSlider;
-let betText;
-let betSliderSize;
-let betSliderxpos;
-
-let betPlaced;
-
-
-
-let tableRows;
-let tableCols;
-let grid;
-
+// ----- MOUSE ----- \\
 let mouseXpos;
 let mouseYpos;
 
 
-let tableXpos;
-let tableYpos;
+// ----- SCREEN CENTERS ----- \\
+let screenCenterx;
+let screenCentery;
 
 
-let mysteryBox;
-let prize;
-let prizeCollectedSound;
+// ----- COLOURS ----- \\
+let casinoRedBackground = "#B30000";
+let casinoGoldTable = "#EFBF04";
+let textColour = "black";
 
 
+// ----- TITLE SCREEN ----- \\
 let titleSize;
 let subTitleSize;
 let titleText = "BIG VON'S CASINO";
 let subTitleText = "All $$$ goes straight to Vivaan Jalla-Dhar (no refunds)";
 let font;
 
+
+// ----- MAKE BETS SCREEN ----- \\
+let cash = 100;
+let cashDisplay;
+
+// minimum and maximum betting amount
+let maximumBet = cash;
+
+// slider
+let betSlider;
+let betText;
+let betSliderSize;
+let betSliderxpos;
+
+// button
+let betPlaced;
+
+
+// ----- GAMBLING ----- \\
+// table generation
+let tableRows;
+let tableCols;
+let grid;
+let tableXpos;
+let tableYpos;
+
+// multiplier
+let moneyMultiplierValue = MONEY_MULTIPLIER;
+let multiplierDisplay;
+
+// prize
+let mysteryBox;
+let prize;
+let prizeCollectedSound;
+
+
+
+// ---------- OBJECT NOTATION ---------- \\
 
 let startScreenButton = {
   button: undefined,
@@ -94,7 +118,7 @@ let beginGambling = {
   ypos: undefined,
 };
 
-
+// -------------------------------------------------------------------
 
 
 
@@ -126,21 +150,30 @@ function restateVariables() {
   }
   subTitleSize = (width + height) / 350;
 
+  // screen centers
   screenCenterx = width/2;
   screenCentery = height/2;
 
+  // ----- START SCREEN BUTTON ----- \\
+  // dimensions
   startScreenButton.width = width/8;
   startScreenButton.height = 30;
 
+  // position
   startScreenButton.xpos = screenCenterx - startScreenButton.width/2;
   startScreenButton.ypos = height * (4/5);
+  // -   -   -   -   -   -   -   -   -   -
 
+  // bet slider
   betSliderSize = width / 3;
   betSliderxpos = screenCenterx-betSliderSize/2;
-
+  
+  // ----- BEGIN GAMBLING BUTTON ----- \\
+  // dimension
   beginGambling.width = width/6;
   beginGambling.height = 60;
-
+  
+  // position
   beginGambling.xpos = screenCenterx - beginGambling.width/2;
   beginGambling.ypos = height * (4/5);
 }
@@ -272,9 +305,9 @@ function makeTable() {
 
 function showMultiplier() {
   multiplierDisplay = `x${moneyMultiplierValue}`;
-  textSize(CASH_DISPLAY_TEXT_SIZE);
+  textSize(MULTIPLIER_DISPLAY_TEXT_SIZE);
   fill("black");
-  text(cashDisplay, width - CASH_DISPLAY_TEXT_SIZE, CASH_DISPLAY_TEXT_SIZE);
+  text(multiplierDisplay, width - MULTIPLIER_DISPLAY_TEXT_SIZE, height - MULTIPLIER_DISPLAY_TEXT_SIZE);
 }
 
 
