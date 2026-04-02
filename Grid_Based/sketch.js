@@ -243,9 +243,9 @@ function startScreen(){
   textSize(titleSize);
   fill(textColour);
   textFont(font);
-  text(titleText, width/2, height * (2/5));
+  text(titleText, screenCenterx, height * (2/5));
   textSize(subTitleSize);
-  text(subTitleText, width/2, height * (3/5));
+  text(subTitleText, screenCenterx, height * (3/5));
 }
 
 
@@ -266,6 +266,8 @@ function makeBetsScreen() {
   textSize(CASH_DISPLAY_TEXT_SIZE);
   fill("black");
   text(cashDisplay, screenCenterx, CASH_DISPLAY_TEXT_SIZE);
+
+  // bet slider
   if (cash <= 1) {
     maximumBet = 1; 
   } 
@@ -377,17 +379,18 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
   if (mouseXpos >= 0 && mouseXpos < tableCols && mouseYpos >= 0 && mouseYpos < tableRows) {
     let gridValue = grid[mouseYpos][mouseXpos];
 
+    // math
     if (gridValue === REWARD) {
       grid[mouseYpos][mouseXpos] = REVEALED;
       
-      let winnings = cash * moneyMultiplierValue;
-      cash = winnings;
+      let winnings = Math.abs(cash) * moneyMultiplierValue;
+      cash += winnings;
       
       moneyMultiplierValue *= MONEY_MULTIPLIER;
       prizeCollectedSound.play();
     } 
     else if (gridValue === MONEY_LOSS) {
-      let lossAmount = cash * moneyMultiplierValue;
+      let lossAmount = Math.abs(cash) * moneyMultiplierValue;
       cash -= lossAmount;
       
       gameStatus = "lose";
