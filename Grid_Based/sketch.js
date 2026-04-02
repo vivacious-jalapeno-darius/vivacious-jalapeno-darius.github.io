@@ -28,7 +28,7 @@ const TABLE_SQUARE_SIZE = 135;
 // ----- LOSS AND REWARD FROM GAMBLING ----- \\
 const MONEY_LOSS = 0;
 const REWARD = 1;
-
+const REVEALED = 2;
 
 //  -   -   -   -   -   -   -   -   -   -   -   - 
 
@@ -42,9 +42,10 @@ let mouseXpos;
 let mouseYpos;
 
 
-// ----- SCREEN CENTERS ----- \\
+// ----- SCREEN CENTERS / MARGIN ----- \\
 let screenCenterx;
 let screenCentery;
+let margin = TABLE_SQUARE_SIZE/4;
 
 
 // ----- COLOURS ----- \\
@@ -87,13 +88,16 @@ let tableXpos;
 let tableYpos;
 
 // multiplier
-let moneyMultiplierValue = MONEY_MULTIPLIER;
+let moneyMultiplierValue = 1;
 let multiplierDisplay;
 
 // prize
 let mysteryBox;
 let prize;
 let prizeCollectedSound;
+
+// dead
+let deviousLaugh;
 
 
 
@@ -128,6 +132,7 @@ function preload(){
   font = loadFont("AmericanCaptain-MdEY.otf");
   prize = loadImage("money(prize).jpg");
   prizeCollectedSound = loadSound("YAHOO SOUND EFFECT (MARIO).mp3");
+  deviousLaugh = loadSound("death_sfx 1.wav");
 }
 
 
@@ -224,6 +229,9 @@ function draw() {
     makeTable();
     showMultiplier();
   }
+  else if (gameStatus === "lose") {
+    flashBang();
+  }
 }
 // -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   - \\
 
@@ -253,13 +261,16 @@ function makeBetsTransition(){
 
 // ---------- "make bets" Game Status ---------- \\
 function makeBetsScreen() {
-  cashDisplay = `$${cash}`;
+  let roundCashValue = Math.round(cash * 100) / 100;
+  cashDisplay = `$${roundCashValue}`;
   textSize(CASH_DISPLAY_TEXT_SIZE);
   fill("black");
   text(cashDisplay, screenCenterx, CASH_DISPLAY_TEXT_SIZE);
-
-  if (MINIMUM_BET >= maximumBet) {
-    maximumBet = MINIMUM_BET;
+  if (cash <= 1) {
+    maximumBet = 1; 
+  } 
+  else {
+    maximumBet = cash;
   }
   betPlaced = betSlider.value();
   text(`Bet: $${betPlaced}`, screenCenterx, height * (2/5));
@@ -269,42 +280,69 @@ function makeBetsScreen() {
 
 // ----- "make bets" >>> "gambling" Transition ----- \\
 function summonGamblingTable() {
-  gameStatus = "gambling";
-  betSlider.hide();
-  beginGambling.button.hide();
+  mathFlooringTable(); 
+  grid = generateGamblingGrid(tableCols, tableRows);
+  setTimeout(() => {
+    gameStatus = "gambling";
+    betSlider.hide();
+    beginGambling.button.hide();
+  }, 100); 
 }
 
 
 
 // ---------- "gambling" Game Status ---------- \\
 function makeTable() {
-  mathFlooringTable();
+  if (gameStatus === "gambling") {
+    let totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
+    let totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
 
-  let totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
-  let totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
+    let offsetX = (width - totalGridWidth) / 2;
+    let offsetY = (height - totalGridHeight) / 2;
 
-  // 2. Find the starting point to center it
-  let offsetX = (width - totalGridWidth) / 2;
-  let offsetY = (height - totalGridHeight) / 2;
+    for (let i = 0; i < tableRows; i++) {
+      for (let j = 0; j < tableCols; j++) { 
+        fill(casinoGoldTable);
+        
+        let xPos = offsetX + j * TABLE_SQUARE_SIZE;
+        let yPos = offsetY + i * TABLE_SQUARE_SIZE;
 
-  for (let i = 0; i < tableRows; i++) {
-    for (let j = 0; j < tableCols; j++) { 
-      fill(casinoGoldTable);
+        square(xPos, yPos, TABLE_SQUARE_SIZE);
 
-      
-      tableXpos = offsetX + j * TABLE_SQUARE_SIZE;
-      tableYpos = offsetY + i * TABLE_SQUARE_SIZE;
-
-      square(tableXpos, tableYpos, TABLE_SQUARE_SIZE);
-      image(mysteryBox, tableXpos, tableYpos, TABLE_SQUARE_SIZE, TABLE_SQUARE_SIZE);
+        if (grid[i][j] === REVEALED) {
+          image(prize, xPos, yPos, TABLE_SQUARE_SIZE, TABLE_SQUARE_SIZE);
+        } 
+        else {
+          image(mysteryBox, xPos, yPos, TABLE_SQUARE_SIZE, TABLE_SQUARE_SIZE);
+        }
+      }
     }
   }
 }
 
 
 
+function generateGamblingGrid(tableCols, tableRows) {
+  let newGrid = [];
+  for (let y = 0; y < tableRows; y++) {
+    newGrid.push([]);
+    for (let x = 0; x < tableCols; x++) {
+      if (random(100) < 10) {
+        newGrid[y].push(MONEY_LOSS); 
+      } 
+      else {
+        newGrid[y].push(REWARD); 
+      }
+    }
+  }
+  return newGrid;
+}
+
+
+
 function showMultiplier() {
-  multiplierDisplay = `x${moneyMultiplierValue}`;
+  let roundMultiplierValue = Math.round(moneyMultiplierValue * 100) / 100;
+  multiplierDisplay = `x${roundMultiplierValue}`;
   textSize(MULTIPLIER_DISPLAY_TEXT_SIZE);
   fill("black");
   text(multiplierDisplay, width - MULTIPLIER_DISPLAY_TEXT_SIZE, height - MULTIPLIER_DISPLAY_TEXT_SIZE);
@@ -318,42 +356,58 @@ function mathFlooringTable() {
 }
 
 
-function mathFlooringMouse() {
-  mouseXpos = Math.floor(mouseX/TABLE_SQUARE_SIZE);
-  mouseYpos = Math.floor(mouseY/TABLE_SQUARE_SIZE);
-}
-
-
 
 function mousePressed() {
-  mathFlooringMouse();
-  revealMysteryBox(mouseXpos, mouseYpos);
+  if (gameStatus === "gambling") {
+    let totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
+    let totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
+    let offsetX = (width - totalGridWidth) / 2;
+    let offsetY = (height - totalGridHeight) / 2;
+
+    let clickedCol = Math.floor((mouseX - offsetX) / TABLE_SQUARE_SIZE);
+    let clickedRow = Math.floor((mouseY - offsetY) / TABLE_SQUARE_SIZE);
+
+    revealMysteryBox(clickedCol, clickedRow);
+  }
 }
 
 
 
 function revealMysteryBox(mouseXpos, mouseYpos) {
   if (mouseXpos >= 0 && mouseXpos < tableCols && mouseYpos >= 0 && mouseYpos < tableRows) {
-    if (grid[y][x] === REWARD) {
+    let gridValue = grid[mouseYpos][mouseXpos];
 
+    if (gridValue === REWARD) {
+      grid[mouseYpos][mouseXpos] = REVEALED;
+      
+      let winnings = cash * moneyMultiplierValue;
+      cash = winnings;
+      
       moneyMultiplierValue *= MONEY_MULTIPLIER;
-    }
-    else if (grid[y][x] === MONEY_LOSS) {
-      moneyMultiplierValue *= MONEY_MULTIPLIER;
-      gameOverJumpScare();
+      prizeCollectedSound.play();
+    } 
+    else if (gridValue === MONEY_LOSS) {
+      let lossAmount = cash * moneyMultiplierValue;
+      cash -= lossAmount;
+      
+      gameStatus = "lose";
+      lossStartTime = millis();
+      deviousLaugh.play();
     }
   }
-
-
 }
 
 
 
-// ----- When Player Clicks Wrong Box ----- \\
-function gameOverJumpScare() {
-  
+
+function flashBang() {
+  background("white");
+  if (millis() - lossStartTime > 3000) {
+    gameStatus = "make bets";
+    moneyMultiplierValue = MONEY_MULTIPLIER; 
+    betSlider.show();
+    beginGambling.button.show();
+  }
 }
-
-
 
 
