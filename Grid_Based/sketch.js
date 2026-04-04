@@ -24,11 +24,14 @@ const MULTIPLIER_DISPLAY_TEXT_SIZE = 40;
 
 // ----- TABLE GENERATION ----- \\
 const TABLE_SQUARE_SIZE = 135;
+const TABLE_SUMMON_DELAY_TIME = 100; // milliseconds
 
 // ----- LOSS AND REWARD FROM GAMBLING ----- \\
 const MONEY_LOSS = 0;
 const REWARD = 1;
 const REVEALED = 2;
+
+const THREE_SECOND_FLASHBANG_TIMER = 3000;
 
 //  -   -   -   -   -   -   -   -   -   -   -   - 
 
@@ -122,6 +125,16 @@ let beginGambling = {
   ypos: undefined,
 };
 
+
+let cashOut = {
+  button: undefined,
+  text: "CASH OUT",
+  width: undefined,
+  height: undefined,
+  xpos: undefined,
+  ypos: undefined,
+};
+
 // -------------------------------------------------------------------
 
 
@@ -142,11 +155,13 @@ function setup() {
   restateVariables();
   startButton();
   selectingBetSlider();
-  letsGoGambling();
+  letsGoGamblingButton();
+  withdrawButton();
 }
 
 
 
+// This is because width and height aren't defined when setting a GLOBAL variable
 function restateVariables() {
   titleSize = (width + height) /10;
   // for vertical screens
@@ -159,6 +174,7 @@ function restateVariables() {
   screenCenterx = width/2;
   screenCentery = height/2;
 
+
   // ----- START SCREEN BUTTON ----- \\
   // dimensions
   startScreenButton.width = width/8;
@@ -167,20 +183,31 @@ function restateVariables() {
   // position
   startScreenButton.xpos = screenCenterx - startScreenButton.width/2;
   startScreenButton.ypos = height * (4/5);
-  // -   -   -   -   -   -   -   -   -   -
 
-  // bet slider
+
+  // ----- BET SLIDER ----- \\
   betSliderSize = width / 3;
   betSliderxpos = screenCenterx-betSliderSize/2;
   
+
   // ----- BEGIN GAMBLING BUTTON ----- \\
-  // dimension
+  // dimensions
   beginGambling.width = width/6;
   beginGambling.height = 60;
   
   // position
   beginGambling.xpos = screenCenterx - beginGambling.width/2;
   beginGambling.ypos = height * (4/5);
+
+
+  // ----- CASH OUT BUTTON ----- \\
+  // dimensions
+  cashOut.width = width/8;
+  cashOut.height = 30;
+
+  // position
+  cashOut.xpos = screenCenterx - cashOut.width/2;
+  cashOut.ypos = cashOut.height;
 }
 
 
@@ -204,7 +231,7 @@ function selectingBetSlider() {
 
 
 
-function letsGoGambling() {
+function letsGoGamblingButton() {
   beginGambling.button = createButton(beginGambling.text);
   beginGambling.button.size(beginGambling.width, beginGambling.height);
   beginGambling.button.position(beginGambling.xpos, beginGambling.ypos);
@@ -215,6 +242,14 @@ function letsGoGambling() {
 
 
 
+function withdrawButton() {
+  cashOut.button = createButton(cashOut.text);
+  cashOut.button.size(cashOut.width, cashOut.height);
+  cashOut.button.position(cashOut.xpos, cashOut.ypos);
+  cashOut.button.style('background-color', casinoGoldTable);
+  cashOut.button.mousePressed(backToBetsScreen);
+  cashOut.button.hide();
+}
 
 // ------------------------- LOOPING FUNCTIONS -------------------------\\
 function draw() {
@@ -274,8 +309,22 @@ function makeBetsScreen() {
   else {
     maximumBet = cash;
   }
+
+  // updates the max limit on the bet slider after every round to follow the logic of the if else statements above 
+  betSlider.elt.max = maximumBet; 
+
   betPlaced = betSlider.value();
   text(`Bet: $${betPlaced}`, screenCenterx, height * (2/5));
+}
+
+
+
+function backToBetsScreen(){
+  gameStatus = "make bets";
+  moneyMultiplierValue = MONEY_MULTIPLIER; 
+  betSlider.show();
+  beginGambling.button.show();
+  cashOut.button.hide();
 }
 
 
@@ -284,11 +333,15 @@ function makeBetsScreen() {
 function summonGamblingTable() {
   mathFlooringTable(); 
   grid = generateGamblingGrid(tableCols, tableRows);
+
+  // sets 100ms delay between when bet button is pressed and when the table summons
+  // this is so that a square isn't already clicked when the 'bet' button is pressed
   setTimeout(() => {
     gameStatus = "gambling";
     betSlider.hide();
     beginGambling.button.hide();
-  }, 100); 
+    cashOut.button.show();
+  }, TABLE_SUMMON_DELAY_TIME); 
 }
 
 
@@ -329,7 +382,7 @@ function generateGamblingGrid(tableCols, tableRows) {
   for (let y = 0; y < tableRows; y++) {
     newGrid.push([]);
     for (let x = 0; x < tableCols; x++) {
-      if (random(100) < 10) {
+      if (random(100) < 50) {
         newGrid[y].push(MONEY_LOSS); 
       } 
       else {
@@ -394,6 +447,7 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       cash -= lossAmount;
       
       gameStatus = "lose";
+      cashOut.button.hide();
       lossStartTime = millis();
       deviousLaugh.play();
     }
@@ -405,7 +459,8 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
 
 function flashBang() {
   background("white");
-  if (millis() - lossStartTime > 3000) {
+  if (millis() - lossStartTime > THREE_SECOND_FLASHBANG_TIMER) {
+    // changes game states after 3s of flashbang
     gameStatus = "make bets";
     moneyMultiplierValue = MONEY_MULTIPLIER; 
     betSlider.show();
