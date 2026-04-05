@@ -310,7 +310,7 @@ function makeBetsTransition(){
 function makeBetsScreen() {
   let roundCashValue = Math.round(cash * 100) / 100;
   // adds commas to the cashDisplay to make it look cleaner
-  cashDisplay = `$${nfc(roundCashValue)}`;
+  cashDisplay = `$${nfc(roundCashValue, 2)}`;
   textSize(CASH_DISPLAY_TEXT_SIZE);
   fill("black");
   text(cashDisplay, screenCenterx, CASH_DISPLAY_TEXT_SIZE);
@@ -327,7 +327,7 @@ function makeBetsScreen() {
   betSlider.elt.max = maximumBet; 
 
   betPlaced = betSlider.value();
-  text(`Bet: $${betPlaced}`, screenCenterx, height * (2/5));
+  text(`Bet: $${nfc(betPlaced)}`, screenCenterx, height * (2/5));
 }
 
 
@@ -395,7 +395,7 @@ function generateGamblingGrid(tableCols, tableRows) {
   for (let y = 0; y < tableRows; y++) {
     newGrid.push([]);
     for (let x = 0; x < tableCols; x++) {
-      if (random(100) < 15) { // 85% chance of getting prize
+      if (random(100) < 10) { // 90% chance of getting prize
         newGrid[y].push(MONEY_LOSS); 
       } 
       else {
@@ -460,7 +460,7 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
     if (gridValue === REWARD) {
       grid[mouseYpos][mouseXpos] = REVEALED;
       
-      let winnings = Math.abs(cash) * moneyMultiplierValue;
+      let winnings = betPlaced * moneyMultiplierValue;
       if (cash === 0){
         cash += MONEY_MULTIPLIER;
       }
@@ -472,7 +472,7 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       prizeCollectedSound.play();
     } 
     else if (gridValue === MONEY_LOSS) {
-      let lossAmount = Math.abs(cash) * moneyMultiplierValue;
+      let lossAmount = betPlaced * moneyMultiplierValue;
       cash -= lossAmount;
       
       gameStatus = "lose";
