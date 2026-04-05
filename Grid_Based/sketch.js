@@ -1,16 +1,29 @@
 // --------------------------------------------------------------------------------
 // Grid Based Assignment
-// Gambling
+// Gambling (BIG VON'S CASINO)
 // Vivaan Jalla-Dhar
 // April 12, 2026
 //
 // Extra for Experts:
-// - Adding touchscreen
+// - Adding touchscreen, a slider, and sound
+// -- When the user touches a part of the screen, it will act the same as mousePressed(), allowing people to play on PC and mobile
+// -- The slider is so players can set the betting amount
+// -- Sound is played when the player clicks a prize or clicks a flashbang square
 // --------------------------------------------------------------------------------
 
 
 // ------------------------- VARIABLES ------------------------- \\
+
 // --------------- CONSTANTS --------------- \\
+
+// ----- TITLE SCREEN ----- \\
+// act like """ """ (triple quotes) from python
+// INTENTIONALLY VERY SMALL
+// this is a constant because it is illigal to change the age limit of a gambling site
+const SUB_TITLE_TEXT = `All $$$ goes straight to Vivaan Jalla-Dhar (no refunds).
+Please play responsibly.
+Must be 10+ to play`; // don't question it
+
 // ----- TOTAL CASH DISPLAY ----- \\
 const CASH_DISPLAY_TEXT_SIZE = 60;
 
@@ -19,7 +32,7 @@ const BET_SLIDER_INCREMENT = 1;
 const MINIMUM_BET = 1;
 
 // ----- MONEY MULTIPLIER ----- \\
-const MONEY_MULTIPLIER = 1.25;
+const MONEY_MULTIPLIER = 1.05;
 const MULTIPLIER_DISPLAY_TEXT_SIZE = 40;
 
 // ----- TABLE GENERATION ----- \\
@@ -61,7 +74,6 @@ let textColour = "black";
 let titleSize;
 let subTitleSize;
 let titleText = "BIG VON'S CASINO";
-let subTitleText = "All $$$ goes straight to Vivaan Jalla-Dhar (no refunds)";
 let font;
 
 
@@ -280,7 +292,7 @@ function startScreen(){
   textFont(font);
   text(titleText, screenCenterx, height * (2/5));
   textSize(subTitleSize);
-  text(subTitleText, screenCenterx, height * (3/5));
+  text(SUB_TITLE_TEXT, screenCenterx, height * (3/5));
 }
 
 
@@ -297,7 +309,8 @@ function makeBetsTransition(){
 // ---------- "make bets" Game Status ---------- \\
 function makeBetsScreen() {
   let roundCashValue = Math.round(cash * 100) / 100;
-  cashDisplay = `$${roundCashValue}`;
+  // adds commas to the cashDisplay to make it look cleaner
+  cashDisplay = `$${nfc(roundCashValue)}`;
   textSize(CASH_DISPLAY_TEXT_SIZE);
   fill("black");
   text(cashDisplay, screenCenterx, CASH_DISPLAY_TEXT_SIZE);
@@ -382,7 +395,7 @@ function generateGamblingGrid(tableCols, tableRows) {
   for (let y = 0; y < tableRows; y++) {
     newGrid.push([]);
     for (let x = 0; x < tableCols; x++) {
-      if (random(100) < 50) {
+      if (random(100) < 15) { // 85% chance of getting prize
         newGrid[y].push(MONEY_LOSS); 
       } 
       else {
@@ -412,6 +425,13 @@ function mathFlooringTable() {
 
 
 
+// when ever the user touches a part of the screen, it will impliment the same things as when mousePressed()
+function touchStarted() {
+  mousePressed;
+}
+
+
+
 function mousePressed() {
   if (gameStatus === "gambling") {
     let totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
@@ -437,8 +457,13 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       grid[mouseYpos][mouseXpos] = REVEALED;
       
       let winnings = Math.abs(cash) * moneyMultiplierValue;
-      cash += winnings;
-      
+      if (cash === 0){
+        cash += MONEY_MULTIPLIER;
+      }
+      else {
+        cash += winnings;
+      }
+
       moneyMultiplierValue *= MONEY_MULTIPLIER;
       prizeCollectedSound.play();
     } 
