@@ -429,7 +429,10 @@ function mathFlooringTable() {
 function touchStarted() {
   if (gameStatus === "gambling") {
     mousePressed();
+    return false;
   }
+
+  return true;
 }
 
 
