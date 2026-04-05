@@ -427,11 +427,7 @@ function mathFlooringTable() {
 
 // when ever the user touches a part of the screen, it will impliment the same things as when mousePressed()
 function touchStarted() {
-  if (gameStatus === "gambling") {
-    mousePressed();
-  }
-
-  return false;
+  mousePressed();
 }
 
 
