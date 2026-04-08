@@ -15,11 +15,15 @@
 // ------------------------- VARIABLES ------------------------- \\
 
 // --------------- CONSTANTS --------------- \\
+// ----- SCREEN ----- \\
+const SCREEN_LEFT_SIDE = 0;
+const SCREEN_TOP_SIDE = 0;
 
 // ----- TITLE SCREEN ----- \\
+const TITLE_TEXT = "BIG VON'S CASINO";
+
 // act like """ """ (triple quotes) from python
 // INTENTIONALLY VERY SMALL
-// this is a constant because it is illigal to change the age limit of a gambling site
 const SUB_TITLE_TEXT = `All $$$ goes straight to Vivaan Jalla-Dhar (no refunds).
 Please play responsibly.
 Must be 10+ to play`; // don't question it
@@ -73,7 +77,6 @@ let textColour = "black";
 // ----- TITLE SCREEN ----- \\
 let titleSize;
 let subTitleSize;
-let titleText = "BIG VON'S CASINO";
 let font;
 
 
@@ -83,15 +86,6 @@ let cashDisplay;
 
 // minimum and maximum betting amount
 let maximumBet = cash;
-
-// slider
-let betSlider;
-let betText;
-let betSliderSize;
-let betSliderxpos;
-
-// button
-let betPlaced;
 
 
 // ----- GAMBLING ----- \\
@@ -124,7 +118,21 @@ let startScreenButton = {
   width: undefined,
   height: undefined,
   xpos: undefined,
-  ypos: undefined,
+  ypos: undefined
+};
+
+
+let betSlider = {
+  slider: undefined,
+  size: undefined,
+  xpos: undefined,
+  ypos: undefined
+};
+
+
+let betPlaced = {
+  value: undefined,
+  ypos: undefined
 };
 
 
@@ -134,7 +142,7 @@ let beginGambling = {
   width: undefined,
   height: undefined,
   xpos: undefined,
-  ypos: undefined,
+  ypos: undefined
 };
 
 
@@ -144,7 +152,7 @@ let cashOut = {
   width: undefined,
   height: undefined,
   xpos: undefined,
-  ypos: undefined,
+  ypos: undefined
 };
 
 // -------------------------------------------------------------------
@@ -175,11 +183,15 @@ function setup() {
 
 // This is because width and height aren't defined when setting a GLOBAL variable
 function restateVariables() {
-  titleSize = (width + height) /10;
   // for vertical screens
   if (width < height) {
     titleSize = width/6;
   }
+  // for horizontal screens
+  else {
+    titleSize = (width + height) /10;
+  }
+
   subTitleSize = (width + height) / 350;
 
   // screen centers
@@ -198,9 +210,12 @@ function restateVariables() {
 
 
   // ----- BET SLIDER ----- \\
-  betSliderSize = width / 3;
-  betSliderxpos = screenCenterx-betSliderSize/2;
+  betSlider.size = width / 3;
+  betSlider.xpos = screenCenterx-betSlider.size/2;
+  betSlider.ypos = height/2;
   
+  // ----- BET TEXT ----- \\
+  betPlaced.ypos = height * (2/5);
 
   // ----- BEGIN GAMBLING BUTTON ----- \\
   // dimensions
@@ -235,10 +250,10 @@ function startButton() {
 
 
 function selectingBetSlider() {
-  betSlider = createSlider(MINIMUM_BET, maximumBet, MINIMUM_BET, BET_SLIDER_INCREMENT);
-  betSlider.size(betSliderSize);
-  betSlider.position(betSliderxpos, height * (1/2));
-  betSlider.hide();
+  betSlider.slider = createSlider(MINIMUM_BET, maximumBet, MINIMUM_BET, BET_SLIDER_INCREMENT);
+  betSlider.slider.size(betSlider.size);
+  betSlider.slider.position(betSlider.xpos, betSlider.ypos);
+  betSlider.slider.hide();
 }
 
 
@@ -262,6 +277,9 @@ function withdrawButton() {
   cashOut.button.mousePressed(backToBetsScreen);
   cashOut.button.hide();
 }
+
+
+
 
 // ------------------------- LOOPING FUNCTIONS -------------------------\\
 function draw() {
@@ -290,7 +308,7 @@ function startScreen(){
   textSize(titleSize);
   fill(textColour);
   textFont(font);
-  text(titleText, screenCenterx, height * (2/5));
+  text(TITLE_TEXT, screenCenterx, height * (2/5));
   textSize(subTitleSize);
   text(SUB_TITLE_TEXT, screenCenterx, height * (3/5));
 }
@@ -300,7 +318,7 @@ function startScreen(){
 function makeBetsTransition(){
   gameStatus = "make bets";
   startScreenButton.button.hide();
-  betSlider.show();
+  betSlider.slider.show();
   beginGambling.button.show();
 }
 
@@ -324,10 +342,10 @@ function makeBetsScreen() {
   }
 
   // updates the max limit on the bet slider after every round to follow the logic of the if else statements above 
-  betSlider.elt.max = maximumBet; 
+  betSlider.slider.elt.max = maximumBet; 
 
-  betPlaced = betSlider.value();
-  text(`Bet: $${nfc(betPlaced)}`, screenCenterx, height * (2/5));
+  betPlaced.value = betSlider.slider.value();
+  text(`Bet: $${nfc(betPlaced.value)}`, screenCenterx, betPlaced.ypos);
 }
 
 
@@ -335,7 +353,7 @@ function makeBetsScreen() {
 function backToBetsScreen(){
   gameStatus = "make bets";
   moneyMultiplierValue = MONEY_MULTIPLIER; 
-  betSlider.show();
+  betSlider.slider.show();
   beginGambling.button.show();
   cashOut.button.hide();
 }
@@ -351,7 +369,7 @@ function summonGamblingTable() {
   // this is so that a square isn't already clicked when the 'bet' button is pressed
   setTimeout(() => {
     gameStatus = "gambling";
-    betSlider.hide();
+    betSlider.slider.hide();
     beginGambling.button.hide();
     cashOut.button.show();
   }, TABLE_SUMMON_DELAY_TIME); 
@@ -453,26 +471,21 @@ function mousePressed() {
 
 
 function revealMysteryBox(mouseXpos, mouseYpos) {
-  if (mouseXpos >= 0 && mouseXpos < tableCols && mouseYpos >= 0 && mouseYpos < tableRows) {
+  if (mouseXpos >= SCREEN_LEFT_SIDE && mouseXpos < tableCols && mouseYpos >= SCREEN_TOP_SIDE && mouseYpos < tableRows) {
     let gridValue = grid[mouseYpos][mouseXpos];
 
-    // math
+    // ----- MATH/CASH CALCULATION ----- \\
     if (gridValue === REWARD) {
       grid[mouseYpos][mouseXpos] = REVEALED;
       
-      let winnings = betPlaced * moneyMultiplierValue;
-      if (cash === 0){
-        cash += MONEY_MULTIPLIER;
-      }
-      else {
-        cash += winnings;
-      }
-
+      let winnings = betPlaced.value * moneyMultiplierValue;
+      cash += winnings;
       moneyMultiplierValue *= MONEY_MULTIPLIER;
       prizeCollectedSound.play();
     } 
+
     else if (gridValue === MONEY_LOSS) {
-      let lossAmount = betPlaced * moneyMultiplierValue;
+      let lossAmount = cash * moneyMultiplierValue;
       cash -= lossAmount;
       
       gameStatus = "lose";
@@ -492,7 +505,7 @@ function flashBang() {
     // changes game states after 3s of flashbang
     gameStatus = "make bets";
     moneyMultiplierValue = MONEY_MULTIPLIER; 
-    betSlider.show();
+    betSlider.slider.show();
     beginGambling.button.show();
   }
 }
