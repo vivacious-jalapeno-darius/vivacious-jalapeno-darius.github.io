@@ -481,21 +481,27 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       grid[mouseYpos][mouseXpos] = REVEALED;
       
       let winnings = betPlaced.value * moneyMultiplierValue;
-      newCashValue + cash + winnings;
+      newCashValue = cash + winnings;
       cash += newCashValue;
       moneyMultiplierValue *= MONEY_MULTIPLIER;
-      prizeCollectedSound.play();
+      // prizeCollectedSound.play();
     } 
 
     else if (gridValue === MONEY_LOSS) {
-      let lossAmount = betPlaced.value * moneyMultiplierValue;
+      let lossAmount = newCashValue * moneyMultiplierValue;
       newCashValue += lossAmount;
-      cash -= newCashValue;
+      if (newCashValue < 0) {
+        cash += newCashValue;
+      }
+      else {
+        cash -= newCashValue;
+      }
       
       gameStatus = "lose";
       cashOut.button.hide();
       lossStartTime = millis();
-      deviousLaugh.play();
+      // deviousLaugh.play();
+      newCashValue = 0;
     }
   }
 }
