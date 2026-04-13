@@ -105,6 +105,8 @@ let mysteryBox;
 let prize;
 let prizeCollectedSound;
 
+let newCashValue = 0;
+
 // dead
 let deviousLaugh;
 
@@ -479,14 +481,16 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       grid[mouseYpos][mouseXpos] = REVEALED;
       
       let winnings = betPlaced.value * moneyMultiplierValue;
-      cash += winnings;
+      newCashValue + cash + winnings;
+      cash += newCashValue;
       moneyMultiplierValue *= MONEY_MULTIPLIER;
       prizeCollectedSound.play();
     } 
 
     else if (gridValue === MONEY_LOSS) {
-      let lossAmount = cash * moneyMultiplierValue;
-      cash -= lossAmount;
+      let lossAmount = betPlaced.value * moneyMultiplierValue;
+      newCashValue += lossAmount;
+      cash -= newCashValue;
       
       gameStatus = "lose";
       cashOut.button.hide();
