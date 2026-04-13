@@ -30,6 +30,7 @@ Must be 10+ to play`; // don't question it
 
 // ----- TOTAL CASH DISPLAY ----- \\
 const CASH_DISPLAY_TEXT_SIZE = 60;
+const DECIMAL_PLACES_2 = 2;
 
 // ----- BETTING SLIDER ----- \\
 const BET_SLIDER_INCREMENT = 1;
@@ -76,7 +77,9 @@ let textColour = "black";
 
 // ----- TITLE SCREEN ----- \\
 let titleSize;
+let titleypos;
 let subTitleSize;
+let subTitleypos;
 let font;
 
 
@@ -196,6 +199,10 @@ function restateVariables() {
 
   subTitleSize = (width + height) / 350;
 
+  // title and subtitle y position
+  titleypos = height * (2/5);
+  subTitleypos = height * (3/5);
+
   // screen centers
   screenCenterx = width/2;
   screenCentery = height/2;
@@ -216,8 +223,10 @@ function restateVariables() {
   betSlider.xpos = screenCenterx-betSlider.size/2;
   betSlider.ypos = height/2;
   
+
   // ----- BET TEXT ----- \\
   betPlaced.ypos = height * (2/5);
+
 
   // ----- BEGIN GAMBLING BUTTON ----- \\
   // dimensions
@@ -310,9 +319,9 @@ function startScreen(){
   textSize(titleSize);
   fill(textColour);
   textFont(font);
-  text(TITLE_TEXT, screenCenterx, height * (2/5));
+  text(TITLE_TEXT, screenCenterx, titleypos);
   textSize(subTitleSize);
-  text(SUB_TITLE_TEXT, screenCenterx, height * (3/5));
+  text(SUB_TITLE_TEXT, screenCenterx, subTitleypos);
 }
 
 
@@ -330,7 +339,7 @@ function makeBetsTransition(){
 function makeBetsScreen() {
   let roundCashValue = Math.round(cash * 100) / 100;
   // adds commas to the cashDisplay to make it look cleaner
-  cashDisplay = `$${nfc(roundCashValue, 2)}`;
+  cashDisplay = `$${nfc(roundCashValue, DECIMAL_PLACES_2)}`;
   textSize(CASH_DISPLAY_TEXT_SIZE);
   fill("black");
   text(cashDisplay, screenCenterx, CASH_DISPLAY_TEXT_SIZE);
@@ -415,11 +424,12 @@ function generateGamblingGrid(tableCols, tableRows) {
   for (let y = 0; y < tableRows; y++) {
     newGrid.push([]);
     for (let x = 0; x < tableCols; x++) {
-      if (random(100) < 10) { // 90% chance of getting prize
-        newGrid[y].push(MONEY_LOSS); 
+      if (random(100) < 90) { // 90% chance of getting prize
+        newGrid[y].push(REWARD);
+        
       } 
       else {
-        newGrid[y].push(REWARD); 
+        newGrid[y].push(MONEY_LOSS); 
       }
     }
   }
