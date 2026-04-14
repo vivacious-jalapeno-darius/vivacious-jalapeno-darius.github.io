@@ -1,11 +1,4 @@
-//Dan Schellenberg
-
-//2D Arrays Example - No Objects Used
-//  - loading platformer level data
-//  - WARNING: You do NOT want to have players/enemies as simply elements in a
-//     grid, if you try to convert this into a functional game. They would move
-//     like characters from a 1980's game.
-//  - tiles are from https://opengameart.org/content/platformer-art-deluxe
+// Text file
 
 let tiles;
 let levelBackground;

@@ -494,7 +494,7 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       newCashValue = cash + winnings;
       cash += newCashValue;
       moneyMultiplierValue *= MONEY_MULTIPLIER;
-      // prizeCollectedSound.play();
+      prizeCollectedSound.play();
     } 
 
     else if (gridValue === MONEY_LOSS) {
@@ -510,12 +510,11 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       gameStatus = "lose";
       cashOut.button.hide();
       lossStartTime = millis();
-      // deviousLaugh.play();
+      deviousLaugh.play();
       newCashValue = 0;
     }
   }
 }
-
 
 
 

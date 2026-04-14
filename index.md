@@ -10,6 +10,8 @@
 - [Rectangular Grid](08-rect_grid)
 - [Game of Life](09-life)
 - [Character in Game](10-character)
+- [Text File](11-platforler-files)
+- [OPP Walker](12-walker)
 
 ## Assignments
 - [Interactive Scene](Interactive_Scene)
