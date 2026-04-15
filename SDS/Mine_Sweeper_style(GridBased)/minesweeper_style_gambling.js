@@ -166,11 +166,11 @@ let cashOut = {
 
 // ------------------------- 1 TIME FUNCTIONS ------------------------ \\
 function preload(){
-  mysteryBox = loadImage('mystery_box.png');
-  font = loadFont("AmericanCaptain-MdEY.otf");
-  prize = loadImage("money(prize).jpg");
-  prizeCollectedSound = loadSound("YAHOO SOUND EFFECT (MARIO).mp3");
-  deviousLaugh = loadSound("death_sfx 1.wav");
+  mysteryBox = loadImage('Image/mystery_box.png');
+  font = loadFont("Font/AmericanCaptain-MdEY.otf");
+  prize = loadImage("Image/money(prize).jpg");
+  prizeCollectedSound = loadSound("Sounds/YAHOO SOUND EFFECT (MARIO).mp3");
+  deviousLaugh = loadSound("Sounds/death_sfx 1.wav");
 }
 
 

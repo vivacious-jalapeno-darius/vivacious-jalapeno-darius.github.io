@@ -1,7 +1,7 @@
 {
   "include": [
     "*.js",
-    "libraries/*.js",
+    "Mine_Sweeper_style(GridBased)/libraries/*.js",
     "c:\\Users\\3602437\\.vscode\\extensions\\wmcicompsci.cs30-p5-1.9.3\\p5types\\global.d.ts"
   ]
 }
