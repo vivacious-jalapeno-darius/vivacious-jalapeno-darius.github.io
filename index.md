@@ -12,6 +12,7 @@
 - [Character in Game](10-character)
 - [Text File](11-platforler-files)
 - [OPP Walker](12-walker)
+- [OPP Fireworks](13-fireworks)
 
 ## Assignments
 - [Interactive Scene](Interactive_Scene)
