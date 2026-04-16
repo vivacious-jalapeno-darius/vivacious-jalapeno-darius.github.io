@@ -98,13 +98,6 @@ let cashDisplay;
 let maximumBet = cash;
 
 
-// ----- MOUSE PRESSED -----\\
-let totalGridWidth;
-let totalGridHeight;
-let offsetX;
-let offsetY;
-
-
 // ----- GAMBLING ----- \\
 // table generation
 let tableRows;
@@ -240,13 +233,6 @@ function restateVariables() {
 
   // ----- BET TEXT ----- \\
   betPlaced.ypos = height * (2/5);
-
-
-  // ----- MOUSE PRESSED ----- \\
-  totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
-  totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
-  offsetX = (width - totalGridWidth) / 2;
-  offsetY = (height - totalGridHeight) / 2;
 
   
   // ----- BEGIN GAMBLING BUTTON ----- \\
@@ -489,6 +475,10 @@ function touchStarted() {
 
 function mousePressed() {
   if (gameStatus === "gambling") {
+    let totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
+    let totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
+    let offsetX = (width - totalGridWidth) / 2;
+    let offsetY = (height - totalGridHeight) / 2;
     let clickedCol = Math.floor((mouseX - offsetX) / TABLE_SQUARE_SIZE);
     let clickedRow = Math.floor((mouseY - offsetY) / TABLE_SQUARE_SIZE);
     revealMysteryBox(clickedCol, clickedRow);
