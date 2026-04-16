@@ -32,10 +32,14 @@ class Particle {
     fill(this.r, this.g, this.b, this.opacity);
     circle(this.x, this.y, this.radius*2);
   }
+
+  isDead() {
+    return this.a -= 1;
+  }
 }
 
 let theFireworks = [];
-const NUMBER_OF_FIREWORKS_PER_CLICK = 100;
+const NUMBER_OF_FIREWORKS_PER_CLICK = 50;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -44,6 +48,11 @@ function setup() {
 function draw() {
   background("black");
   for (let someFirework of theFireworks) {
+    if (someFirework.isDead()) {
+      // remove it
+      let index = theFireworks.indexOf(someFirework);
+      theFireworks.splice(index, 1);
+    }
     someFirework.update();
     someFirework.display();
   }
