@@ -28,9 +28,13 @@ const SUB_TITLE_TEXT = `All $$$ goes straight to Vivaan Jalla-Dhar (no refunds).
 Please play responsibly.
 Must be 10+ to play`; // don't question it
 
-// ----- TOTAL CASH DISPLAY ----- \\
+// ----- TOTAL CASH DISPLAY / OTHER CASH RELATED CONSTANTS ----- \\
 const CASH_DISPLAY_TEXT_SIZE = 60;
+
 const DECIMAL_PLACES_2 = 2;
+const DECIMAL_ROUNDER = 100;
+
+const BROKE = 0;
 
 // ----- BETTING SLIDER ----- \\
 const BET_SLIDER_INCREMENT = 1;
@@ -43,6 +47,9 @@ const MULTIPLIER_DISPLAY_TEXT_SIZE = 40;
 // ----- TABLE GENERATION ----- \\
 const TABLE_SQUARE_SIZE = 135;
 const TABLE_SUMMON_DELAY_TIME = 100; // milliseconds
+
+const PERCENTAGE = 100;
+const CHANCE_TO_GET_PRIZE = 90;
 
 // ----- LOSS AND REWARD FROM GAMBLING ----- \\
 const MONEY_LOSS = 0;
@@ -89,6 +96,13 @@ let cashDisplay;
 
 // minimum and maximum betting amount
 let maximumBet = cash;
+
+
+// ----- MOUSE PRESSED -----\\
+let totalGridWidth;
+let totalGridHeight;
+let offsetX;
+let offsetY;
 
 
 // ----- GAMBLING ----- \\
@@ -228,6 +242,13 @@ function restateVariables() {
   betPlaced.ypos = height * (2/5);
 
 
+  // ----- MOUSE PRESSED ----- \\
+  totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
+  totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
+  offsetX = (width - totalGridWidth) / 2;
+  offsetY = (height - totalGridHeight) / 2;
+
+  
   // ----- BEGIN GAMBLING BUTTON ----- \\
   // dimensions
   beginGambling.width = width/6;
@@ -337,7 +358,7 @@ function makeBetsTransition(){
 
 // ---------- "make bets" Game Status ---------- \\
 function makeBetsScreen() {
-  let roundCashValue = Math.round(cash * 100) / 100;
+  let roundCashValue = Math.round(cash * DECIMAL_ROUNDER) / DECIMAL_ROUNDER;
   // adds commas to the cashDisplay to make it look cleaner
   cashDisplay = `$${nfc(roundCashValue, DECIMAL_PLACES_2)}`;
   textSize(CASH_DISPLAY_TEXT_SIZE);
@@ -424,7 +445,7 @@ function generateGamblingGrid(tableCols, tableRows) {
   for (let y = 0; y < tableRows; y++) {
     newGrid.push([]);
     for (let x = 0; x < tableCols; x++) {
-      if (random(100) < 90) { // 90% chance of getting prize
+      if (random(PERCENTAGE) < CHANCE_TO_GET_PRIZE) { // 90% chance of getting prize
         newGrid[y].push(REWARD);
         
       } 
@@ -439,7 +460,7 @@ function generateGamblingGrid(tableCols, tableRows) {
 
 
 function showMultiplier() {
-  let roundMultiplierValue = Math.round(moneyMultiplierValue * 100) / 100;
+  let roundMultiplierValue = Math.round(moneyMultiplierValue * DECIMAL_ROUNDER) / DECIMAL_ROUNDER;
   multiplierDisplay = `x${roundMultiplierValue}`;
   textSize(MULTIPLIER_DISPLAY_TEXT_SIZE);
   fill("black");
@@ -460,7 +481,7 @@ function touchStarted() {
   if (gameStatus === "gambling") {
     mousePressed();
   }
-
+  // this allows for the player to click button and grid (touchscreen device only)
   return true;
 }
 
@@ -468,14 +489,8 @@ function touchStarted() {
 
 function mousePressed() {
   if (gameStatus === "gambling") {
-    let totalGridWidth = tableCols * TABLE_SQUARE_SIZE;
-    let totalGridHeight = tableRows * TABLE_SQUARE_SIZE;
-    let offsetX = (width - totalGridWidth) / 2;
-    let offsetY = (height - totalGridHeight) / 2;
-
     let clickedCol = Math.floor((mouseX - offsetX) / TABLE_SQUARE_SIZE);
     let clickedRow = Math.floor((mouseY - offsetY) / TABLE_SQUARE_SIZE);
-
     revealMysteryBox(clickedCol, clickedRow);
   }
 }
@@ -500,7 +515,8 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
     else if (gridValue === MONEY_LOSS) {
       let lossAmount = newCashValue * moneyMultiplierValue;
       newCashValue += lossAmount;
-      if (newCashValue < 0) {
+      if (newCashValue < BROKE) {
+        // adds because if broke (cash in negatives) then it will be cash -= (-newCashValue) which essentially means cash += newCashValue
         cash += newCashValue;
       }
       else {
@@ -511,7 +527,7 @@ function revealMysteryBox(mouseXpos, mouseYpos) {
       cashOut.button.hide();
       lossStartTime = millis();
       deviousLaugh.play();
-      newCashValue = 0;
+      newCashValue = BROKE;
     }
   }
 }

@@ -19,4 +19,3 @@
 - [Array and Object Assignment](Array_&_Object_Notation)
 - [Grid Based Game](Grid_Based)
 
-## [SDS](SDS)
