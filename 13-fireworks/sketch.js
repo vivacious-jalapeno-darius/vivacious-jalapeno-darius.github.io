@@ -1,9 +1,5 @@
-// Project Title
-// Your Name
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Firework 
+// 2026 - 04 - 13
 
 class Particle {
   constructor(x, y) {
