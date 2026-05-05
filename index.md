@@ -16,6 +16,7 @@
 - [OOP Ball Collision](14-ball_oop)
 - [OOP Connected Nodes](15-nodes)
 - [OOP Inheritance](16-inheritance)
+- [Collide 2D Library](17-collide)
 
 ## Assignments
 - [Interactive Scene](Interactive_Scene)
